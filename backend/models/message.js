@@ -1,7 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var Message = sequelize.define('Message', {
-    idUSERS: DataTypes.INTEGER,
     title: DataTypes.STRING,
     contenu: DataTypes.STRING,
     imageURL: DataTypes.STRING, 

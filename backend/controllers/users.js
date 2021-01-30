@@ -3,7 +3,7 @@ const models = require('../models');
 const auth = require('../middleware/auth');
 const fs = require('fs');
 
-
+ 
 
 //regex
 const regex_pass =/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;

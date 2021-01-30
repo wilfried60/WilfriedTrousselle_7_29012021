@@ -2,7 +2,8 @@
 // Importation
 const express     = require('express');
 const bodyParser  = require('body-parser');
-const apiRouter   = require('./routes/usersRoute');
+const userRouter   = require('./routes/usersRoute');
+const messageRouter   = require('./routes/messageRoute');
 const app = express();
 const path = require('path');
 
@@ -19,6 +20,7 @@ app.use((req, res, next) => {
 // configuration de bodyParser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/api/', apiRouter);
+app.use('/api/', userRouter);
+app.use('/api/', messageRouter);
 
 module.exports = app;
