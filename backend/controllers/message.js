@@ -38,7 +38,6 @@ const fs = require('fs');
                        contenu: contenu,
                        imageURL: imageURL,
                        likes: 0,
-                       dislikes: 0,
                        UserId: user.id
                    });
                    return res.status(201).json({ message: 'Publication créer!' });
@@ -65,7 +64,7 @@ models.Message.findOne({
     where: { id: messageID },
     include: [{
         model: models.User,
-        attributes: [ 'id', 'username', 'photoURL' ]
+        attributes: [ 'id', 'username', 'usersurname', 'photoURL' ]
       }]
 })
    .then((message) => {
@@ -76,7 +75,7 @@ models.Message.findOne({
         return res.status(500).json({ 'error': 'Aucune publication!' });
     }
 })
-.catch((err) => res.status(500).json({ 'error': 'Une erreur est survenue!' }));
+.catch((err) => res.status(500).json({ 'error': 'Une erreur est survenue!' })); 
 
 }
 
@@ -176,3 +175,7 @@ models.Message.findAll({
 .catch((err) => res.status(500).json({ 'error': 'Une erreur est survenue!' }));
 
 }
+
+
+
+ 

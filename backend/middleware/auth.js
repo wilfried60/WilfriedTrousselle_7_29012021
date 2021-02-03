@@ -6,7 +6,6 @@ module.exports = {
   USERtoken: function(userData) {
     return jwt.sign({
       userId: userData.id,
-      isAdmin: userData.isAdmin
     },
     JWT,
     {

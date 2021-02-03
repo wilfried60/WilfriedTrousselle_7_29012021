@@ -1,15 +1,25 @@
 const express = require('express');
-const usersCtrl = require('../controllers/message');
+const messageCtrl = require('../controllers/message');
+const likeCtrl = require('../controllers/like');
+const commentaireCtrl = require('../controllers/commentaire');
 const Router = express.Router();
 
 
-// router
+// message
 
-Router.post('/users/message/:id',usersCtrl.createMessage);
-Router.get('/users/message/',usersCtrl.allMessage);
-Router.get('/users/message/:id',usersCtrl.oneMessage);
-Router.put('/users/message/:id',usersCtrl.modifyMessage);
-Router.delete('/users/message/:id',usersCtrl.deleteMessage);
+Router.post('/users/message/:id',messageCtrl.createMessage);
+Router.get('/users/message/',messageCtrl.allMessage);
+Router.get('/users/message/:id',messageCtrl.oneMessage);
+Router.put('/users/message/:id',messageCtrl.modifyMessage);
+Router.delete('/users/message/:id',messageCtrl.deleteMessage);
 
+
+//like
+Router.post('/users/message/:id/like',likeCtrl.like);
+
+//commentaire
+Router.post('/users/:id/commentaire',commentaireCtrl.createcommentaire);
+Router.delete('/users/commentaire/:id',commentaireCtrl.deletecommentaire);
+Router.get('/users/commentaire/:id',commentaireCtrl.getcommentaire);
 
 module.exports = Router;

@@ -50,7 +50,7 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
                                 password: bcryptedPassword,
                                 photoURL: photoURL,
                                 description: description,
-                                isAdmin: 0
+                                isAdmin: false
                             })
                                 .then((newUser) => res.status(201).json({
                                         'userId': newUser.id,
@@ -71,7 +71,7 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
         const email = req.body.email;
         const password = req.body.password;
         if (email == null ||  password == null) {
-            return res.status(400).json({ 'error': 'missing parameters' });
+            return res.status(400).json({ 'error': 'Il manque un paramètre!' });
           }
           models.User.findOne({
             where: { email: email }
@@ -120,7 +120,7 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
         res.status(404).json({ 'error': 'utilisateur non trouvé' });
       }
     }).catch(function(err) {
-      res.status(500).json({ 'error': 'cannot fetch user' });
+      res.status(500).json({ 'error': 'Impossible d\'accéder à l\'utilisateur' });
     });
     }
 
