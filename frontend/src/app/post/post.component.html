@@ -1,0 +1,26 @@
+<main>
+    <div class="cadre-post">
+        <p class="text-danger">{{ errorMSG }}</p>
+       <div class="post" >
+        <div class="card" >
+            
+            <div class="card-body">
+              
+              </div>
+             
+              <button class="btn btn-primary" type="submit">
+                   <a routerLink="../post/create" title="Créer un post" >Créer un post</a>
+                </button>
+
+                 <div class="card-body" *ngFor="let post of posts">
+                  <div class="post" *ngIf="post.title">{{post.title}} 
+                    <p *ngIf="post.contenu"> {{post.User.username}} </p>
+                     <p  *ngIf="post.imageURL"> {{post.imageURL}} </p>
+                     <p  *ngIf="post.contenu"> {{post.contenu}}</p>
+                    </div>
+               </div>
+          </div>
+    </div> 
+    </div>
+    </main> 
+    

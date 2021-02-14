@@ -13,13 +13,13 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
 
      // création de l'utilisateur
     exports.register= (req, res, next) => {
-        const email = req.body.email;
-        const username = req.body.username;
-        const usersurname = req.body.usersurname;
-        const password = req.body.password;
-        const photoURL = req.body.photoURL;
-        const description = req.body.description;
-        const isAdmin = req.body.isAdmin;
+        let email = req.body.email;
+        let username = req.body.username;
+        let usersurname = req.body.usersurname;
+        let password = req.body.password;
+        let photoURL = req.body.photoURL;
+        let description = req.body.description;
+        let isAdmin = req.body.isAdmin;
 
         // on vérifie si les données existe
         if (email == null || username == null || usersurname == null || password == null) {
@@ -33,6 +33,15 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
 
         if (regex_pass.test(password) == false) {
             return res.status(400).json({ 'error': 'mot de passe invalide' });
+        }
+    
+
+        if (photoURL != null) {
+          photoURL = `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename
+          }`;
+        } else {
+          photoURL = null;
         }
 
         models.User.findOne({
@@ -68,8 +77,8 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
 
      // connexion de l'utilisateur
       exports.login= (req, res, next) => {
-        const email = req.body.email;
-        const password = req.body.password;
+        let email = req.body.email;
+        let password = req.body.password;
         if (email == null ||  password == null) {
             return res.status(400).json({ 'error': 'Il manque un paramètre!' });
           }
@@ -86,7 +95,7 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
                             'message': `Hello ${user.username}!`});
                           
                 } else {
-                return res.status(403).json({ 'error': 'mot de pass invalide' });
+                return res.status(403).json({ 'error': 'mot de passe invalide' });
               }
           });
         } else {
@@ -104,9 +113,9 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
        // connexion au profil de l'utilisateur
       exports.profil= (req, res, next) => {
 
-    const headerAuth = req.headers['authorization'];
-    const userId = auth.userid(headerAuth);
-    const iduser = req.params.id;
+    let headerAuth = req.headers['authorization'];
+    let userId = auth.userid(headerAuth);
+    let iduser = req.params.id;
     if (userId != iduser )
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
@@ -128,17 +137,17 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
   // modification du profil de l'utilisateur
   exports.modifyProfil= (req, res, next) => {
 
-    const headerAuth = req.headers['authorization'];
-    const userId = auth.userid(headerAuth);
-    const iduser = req.params.id;
+    let headerAuth = req.headers['authorization'];
+    let userId = auth.userid(headerAuth);
+    let iduser = req.params.id;
     if (userId != iduser )
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
-    const description = req.body.description;
-    const username = req.body.username;
-    const usersurname = req.body.usersurname;
-    const photoURL = req.body.photoURL;
-    const email = req.body.email;
+      let description = req.body.description;
+      let username = req.body.username;
+      let usersurname = req.body.usersurname;
+      let photoURL = req.body.photoURL;
+      let email = req.body.email;
 
     models.User.findOne({
       attributes: [ 'id', 'email', 'username', 'usersurname', 'description','photoURL' ],
@@ -165,9 +174,9 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
      // suppression d'un profil
   exports.DeleteProfil= (req, res, next) => {
 
-    const headerAuth  = req.headers['authorization'];
-    const userId      = auth.userid(headerAuth);
-    const iduser = req.params.id;
+    let headerAuth  = req.headers['authorization'];
+    let userId      = auth.userid(headerAuth);
+    let iduser = req.params.id;
     if (userId != iduser )
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
@@ -175,7 +184,7 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
       where: { id: userId }
     }).then((user) => {
       if (user.photoURL !== null) {
-        const filename = user.photo.split("/images")[1];
+        let filename = user.photo.split("/images")[1];
         fs.unlink(`images/${filename}`, () => {
           // s'il y a une photo de profile, on supprimme tout
           models.User.destroy({ where: { id: userId } });
@@ -195,8 +204,8 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
     // récupération de tout les profils
   exports.ALLProfil= (req, res, next) => {
 
-    const headerAuth  = req.headers['authorization'];
-    const userId      = auth.userid(headerAuth);
+    let headerAuth  = req.headers['authorization'];
+    let userId      = auth.userid(headerAuth);
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 

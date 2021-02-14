@@ -4,12 +4,12 @@ const auth = require('../middleware/auth');
 
 // mise en place d'un like
 exports.like= (req, res, next) => {
-    const headerAuth = req.headers['authorization'];
-    const userId = auth.userid(headerAuth);
+    let headerAuth = req.headers['authorization'];
+    let userId = auth.userid(headerAuth);
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
-      const messageID = req.params.id;
+      let messageID = req.params.id;
 
      models.Message.findOne({
         where: { id: messageID },

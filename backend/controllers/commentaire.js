@@ -1,19 +1,19 @@
 const models = require('../models');
 const auth = require('../middleware/auth');
 const fs = require('fs');
-const message = require('../models/message');
+
 
 //création d'un commentaire
 exports.createcommentaire= (req, res, next) => {
-    const headerAuth = req.headers['authorization'];
-    const userId = auth.userid(headerAuth);
+    let headerAuth = req.headers['authorization'];
+    let userId = auth.userid(headerAuth);
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
-     const commentaire = req.body.commentaire;
-     const username = req.body.username;
-     const usersurname = req.body.usersurname;
-     const MessageId = req.params.id;
+      let commentaire = req.body.commentaire;
+      let username = req.body.username;
+      let usersurname = req.body.usersurname;
+      let MessageId = req.params.id;
 
      models.Message.findOne({
         where: { id: MessageId}
@@ -45,12 +45,12 @@ exports.createcommentaire= (req, res, next) => {
 
 // affichage des commentaire d'un message
 exports.getcommentaire= (req, res, next) => {
-    const headerAuth = req.headers['authorization'];
-    const userId = auth.userid(headerAuth);
+    let headerAuth = req.headers['authorization'];
+    let userId = auth.userid(headerAuth);
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
-      const MessageId = req.params.id;
+      let MessageId = req.params.id;
 
       models.Commentaire.findAll({
           attributes:['id', 'commentaire', 'username', 'usersurname', 'MessageId', 'UserId'],
@@ -71,13 +71,13 @@ exports.getcommentaire= (req, res, next) => {
 
     //supression du commentaire
     exports.deletecommentaire= (req, res, next) => {
-        const headerAuth = req.headers['authorization'];
-        const userId = auth.userid(headerAuth);
+        let headerAuth = req.headers['authorization'];
+        let userId = auth.userid(headerAuth);
         if (!userId)
           return res.status(400).json({ 'error': 'mauvaise identification' });
     
-          const commentaires = req.params.id;
-          const message = req.body.messageid;
+          let commentaires = req.params.id;
+          let message = req.body.messageid;
          
     
           models.Commentaire.findOne({

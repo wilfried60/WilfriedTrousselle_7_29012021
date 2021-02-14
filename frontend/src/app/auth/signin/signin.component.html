@@ -1,0 +1,21 @@
+
+   <main>
+    <div class="cadre-auth">
+        <h1>Connexion</h1> 
+        <hr>
+        <p class="text-danger"> {{ msgerror }}</p>
+        <form [formGroup]="signinForm" (ngSubmit)="onSubmitSigninForm()">
+      <div class="form-group">
+        <label for="email" class="text-color" >Email</label>
+        <input type="email" class="form-control" id="email" formControlName="email" placeholder="dupont@mail.fr" required >
+      </div>
+      <div class="form-group">
+        <label for="password"  class="text-color">Mot de passe</label>
+        <input type="password" class="form-control" id="password" formControlName="password" placeholder="Minimum 8 caractère" required>
+      </div>
+        <button class="btn btn-primary" type="submit" [disabled]="signinForm.invalid">Connexion</button>
+      </form>
+      <p class="compte">Vous n'avez pas encore de compte?  <a routerLink="../signup" title="Créer un post" >Inscrivez-vous</a></p>
+    </div>
+    </main>
+  

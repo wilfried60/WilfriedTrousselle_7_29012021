@@ -5,15 +5,15 @@ const fs = require('fs');
 
  // création du message
  exports.createMessage= (req, res, next) => {
-    const headerAuth = req.headers['authorization'];
-    const userId = auth.userid(headerAuth);
-    const iduser = req.params.id;
+  let headerAuth = req.headers['authorization'];
+  let userId = auth.userid(headerAuth);
+  let iduser = req.params.id;
     if (userId != iduser )
       return res.status(400).json({ 'error': 'mauvaise identification' });   
     
-      const title = req.body.title;
-      const contenu = req.body.contenu;
-      const imageURL = req.body.imageURL;
+      let title = req.body.title;
+      let contenu = req.body.contenu;
+      let imageURL = req.body.imageURL;
     
 
       if (imageURL != null) {
@@ -52,12 +52,12 @@ const fs = require('fs');
 
 //Récupération d'un message
 exports.oneMessage= (req, res, next) => {
-    const headerAuth = req.headers['authorization'];
-    const userId = auth.userid(headerAuth);
+  let headerAuth = req.headers['authorization'];
+  let userId = auth.userid(headerAuth);
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
-    const messageID = req.params.id;
+      let messageID = req.params.id;
 
 models.Message.findOne({
     attributes:['id', 'title', 'contenu', 'imageURL', 'likes', 'dislikes'],
@@ -81,16 +81,16 @@ models.Message.findOne({
 
 //Modification d'un message
 exports.modifyMessage= (req, res, next) => {
-    const headerAuth = req.headers['authorization'];
-    const userId = auth.userid(headerAuth);
+  let headerAuth = req.headers['authorization'];
+  let userId = auth.userid(headerAuth);
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
-    const title = req.body.title;
-    const contenu = req.body.contenu;
-    const imageURL = req.body.imageURL;
+      let title = req.body.title;
+      let contenu = req.body.contenu;
+      let imageURL = req.body.imageURL;
 
-    const messageID = req.params.id;
+      let messageID = req.params.id;
 
     models.Message.findOne({
         attributes: ['id', 'title', 'contenu', 'imageURL'],
@@ -119,12 +119,12 @@ exports.modifyMessage= (req, res, next) => {
 
 //Suppression d'un message
 exports.deleteMessage= (req, res, next) => {
-    const headerAuth = req.headers['authorization'];
-    const userId = auth.userid(headerAuth);
+  let headerAuth = req.headers['authorization'];
+  let userId = auth.userid(headerAuth);
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
-    const messageID = req.params.id;
+      let messageID = req.params.id;
 
     models.Message.findOne({
           where: { id: messageID, userId:userId },
@@ -132,7 +132,7 @@ exports.deleteMessage= (req, res, next) => {
         
         .then((message) => {
             if (message.imageURL !== null) {
-              const filename = user.photo.split("/images")[1];
+              let filename = user.photo.split("/images")[1];
               fs.unlink(`images/${filename}`, () => {
                 // s'il y a une image, on supprimme tout
                 models.Message.destroy({ where: { id: messageID } });
@@ -151,8 +151,8 @@ exports.deleteMessage= (req, res, next) => {
 
 //Récupération de tout les messages
 exports.allMessage= (req, res, next) => {
-    const headerAuth = req.headers['authorization'];
-    const userId = auth.userid(headerAuth);
+  let headerAuth = req.headers['authorization'];
+  let userId = auth.userid(headerAuth);
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
     

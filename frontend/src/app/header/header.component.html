@@ -1,0 +1,14 @@
+<header>
+    <div class="logo-menu"><img src="assets/icon-left-font-monochrome-white.svg" alt="logo groupomania" /> </div>
+     <nav>
+      <ul>  
+      <li routerLinkActive="active" *ngIf="!isauth"><a routerLink="auth/signin" >Connexion</a></li>
+       <li routerLinkActive="active"  *ngIf="!isauth"><a routerLink="auth/signup">Inscription</a></li>
+       <li (click)="signout()" *ngIf="isauth" title="Déconnexion"><a routerLink="auth/signin"><i class="fas fa-user-times"></i></a></li>
+       <li routerLinkActive="active"  *ngIf="isauth"><a routerLink="post"  title="Voir les publications"><i class="fas fa-comment-alt"></i></a></li>
+       <li routerLinkActive="active"  *ngIf="isauth"><a routerLink="post/create" title="Créer un post" ><i class="fas fa-edit"></i></a></li>  
+       <li routerLinkActive="active"  *ngIf="isauth"><a routerLink="profil-user"  title="Voir mon profil"><i class="fas fa-users-cog"></i></a></li>
+      </ul>
+     </nav>
+   </header>
+
