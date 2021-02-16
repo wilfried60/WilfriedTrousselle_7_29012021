@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { PostService } from 'src/app/services/post.service';
+
 
 
 
@@ -8,15 +12,35 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create.component.scss']
 })
 export class CreateComponent implements OnInit {
-  Post: any;
-
- 
+  
+  FormGroup!: FormGroup;
 
   constructor(
- 
-    ) { }
+    public formBuilder: FormBuilder,
+    private router: Router,
+    private postService: PostService
+    ) { 
+      this.FormGroup = this.formBuilder.group({
+  
+        title: [''],
+        contenu: ['',Validators.required],
+       
+      
+      })
+    }
 
   ngOnInit(): void {
+  }
+
+  onSubmit() {
+    
+    this.postService.createPost(this.FormGroup.value)
+    .subscribe(() => {
+        console.log('le post est bien enregistré!'),
+        this.router.navigateByUrl('/post')
+      }, (error) => {
+        console.log(error.error);
+    });
   }
 
 

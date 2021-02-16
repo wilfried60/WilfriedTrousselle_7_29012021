@@ -3,15 +3,12 @@
         <h2>Créer un post</h2>
         <hr>
         
-    <form>
+    <form [formGroup]="FormGroup" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label for="title" class="text-color" >Titre</label>
           <input type="text" class="form-control" id="title" formControlName="title" placeholder="Titre ( pas obligatoire!)" >
         </div>
-        <div class="form-group">
-          <label for="imageURL" class="text-color" ></label>
-          <input type="file" class="custom-file-input text-color" id="imageURL" formControlName="imageURL">
-        </div>
+      
         <div class="form-group">
           <div class="input-group-prepend">
             <label for="contenu" class="text-color" >contenu</label>

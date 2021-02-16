@@ -7,10 +7,9 @@ const fs = require('fs');
  exports.createMessage= (req, res, next) => {
   let headerAuth = req.headers['authorization'];
   let userId = auth.userid(headerAuth);
-  let iduser = req.params.id;
-    if (userId != iduser )
-      return res.status(400).json({ 'error': 'mauvaise identification' });   
-    
+    if (!userId)
+      return res.status(400).json({ 'error': 'mauvaise identification' });
+      
       let title = req.body.title;
       let contenu = req.body.contenu;
       let imageURL = req.body.imageURL;
@@ -38,6 +37,7 @@ const fs = require('fs');
                        contenu: contenu,
                        imageURL: imageURL,
                        likes: 0,
+                       dislikes: 0,
                        UserId: user.id
                    });
                    return res.status(201).json({ message: 'Publication créer!' });
@@ -60,7 +60,7 @@ exports.oneMessage= (req, res, next) => {
       let messageID = req.params.id;
 
 models.Message.findOne({
-    attributes:['id', 'title', 'contenu', 'imageURL', 'likes', 'dislikes'],
+    attributes:['id', 'title', 'contenu', 'imageURL', 'likes'],
     where: { id: messageID },
     include: [{
         model: models.User,
@@ -158,10 +158,10 @@ exports.allMessage= (req, res, next) => {
     
 
 models.Message.findAll({
-    attributes:['id', 'title', 'contenu', 'imageURL', 'likes', 'dislikes'],
+    attributes:['id', 'title', 'contenu', 'imageURL', 'likes'],
     include: [{
         model: models.User,
-        attributes: [ 'id', 'username', 'photoURL' ]
+        attributes: [ 'id', 'username', 'usersurname' ,'photoURL' ]
       }]
 })
    .then((message) => {

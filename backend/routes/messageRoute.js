@@ -7,7 +7,7 @@ const Router = express.Router();
 
 // message
 
-Router.post('/users/message/:id',messageCtrl.createMessage);
+Router.post('/users/message/',messageCtrl.createMessage);
 Router.get('/users/message/',messageCtrl.allMessage);
 Router.get('/users/message/:id',messageCtrl.oneMessage);
 Router.put('/users/message/:id',messageCtrl.modifyMessage);

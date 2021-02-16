@@ -16,7 +16,7 @@ export class PostService {
     private httpClient: HttpClient,
   ) { }
    
-
+  //on récupère les posts
   getPostAll(): Observable<Post> {
     return this.httpClient.get<Post>('http://localhost:3000/api/users/message')
     .pipe(
@@ -24,41 +24,42 @@ export class PostService {
     )
   }
   
-  create(post:any): Observable<Post> {
-    return this.httpClient.post<Post>('http://localhost:3000/api/users/message', JSON.stringify(post))
+  //on créer un post
+  createPost(post:any): Observable<Post> {
+    return this.httpClient.post<Post>('http://localhost:3000/api/users/message', post)
     .pipe(
       catchError(this.errorHandler)
     )
   }  
-  getById(id: string): Observable<Post> {
+
+  //on récupère le post de l'utilisateur
+  getPostById(id: string): Observable<Post> {
     return this.httpClient.get<Post>('http://localhost:3000/api/users/message' + id)
     .pipe(
       catchError(this.errorHandler)
     )
   }
-
-  update(id: string, post: any): Observable<Post> {
-    return this.httpClient.put<Post>('http://localhost:3000/api/users/message' + id, JSON.stringify(post),)
+  
+  //l'utilisateur modifie son post
+  updatePost(id: string, post: any): Observable<Post> {
+    return this.httpClient.put<Post>('http://localhost:3000/api/users/message' + id, post)
     .pipe(
       catchError(this.errorHandler)
     )
   }
-
-  delete(id: string){
+  
+  // l'utilisateur supprime son post
+  deletePost(id: string){
     return this.httpClient.delete<Post>('http://localhost:3000/api/users/message' + id,)
     .pipe(
       catchError(this.errorHandler)
     )
   }
-  errorHandler(error: { error: { message: string; }; status: any; message: any; }) {
+  
+   // on renvoie l'erreur du serveur
+  errorHandler(error:any) {
      let errorMessage = '';
-     if(error.error instanceof ErrorEvent) {
-       
-       errorMessage = error.error.message;
-     } else {
-      
-       errorMessage = `Error Code: ${error.status}\nMessage: ${error.error}`;
-     }
+       errorMessage = error.error;
      console.log(errorMessage);
      return throwError(errorMessage);
   }

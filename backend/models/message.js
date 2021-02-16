@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     contenu: DataTypes.STRING,
     imageURL: DataTypes.STRING, 
     likes: DataTypes.INTEGER,
+    dislikes: DataTypes.INTEGER,
   
   }, {
     classMethods: {

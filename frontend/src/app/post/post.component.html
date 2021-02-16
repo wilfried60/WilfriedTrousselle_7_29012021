@@ -13,8 +13,8 @@
                 </button>
 
                  <div class="card-body" *ngFor="let post of posts">
+                  <p *ngIf="post.contenu">{{post.User.username}} {{post.User.usersurname}}</p>
                   <div class="post" *ngIf="post.title">{{post.title}} 
-                    <p *ngIf="post.contenu"> {{post.User.username}} </p>
                      <p  *ngIf="post.imageURL"> {{post.imageURL}} </p>
                      <p  *ngIf="post.contenu"> {{post.contenu}}</p>
                     </div>
