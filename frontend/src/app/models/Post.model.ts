@@ -1,7 +1,7 @@
 
 export class Post{
     message!: [{
-        id: string;
+        id: number;
         title: string;
         contenu: string;
         imageURL: string;
@@ -9,7 +9,7 @@ export class Post{
         updatedAt: string;
 
         User:[{
-            id: string;
+            id: number;
             username: string;
             usersurname: string;
             photoURL: string;

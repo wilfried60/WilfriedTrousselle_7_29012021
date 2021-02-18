@@ -43,10 +43,15 @@ export class SignupComponent implements OnInit {
 
     this.AuthService.signupUser(email, password, username, usersurname)
     .then(
-        (data) => {
-          this.router.navigate(['/post']);
-          
-          
+        (data:any) => {
+          this.AuthService.signinUser(email, password).then(
+            () => {
+              this.router.navigate(['/post']);
+            })
+            .catch(
+            (error) => {
+              this.msgerror = error.message;
+            }); 
         })
         .catch(
           (error) =>{
@@ -55,7 +60,6 @@ export class SignupComponent implements OnInit {
         )
   
   }
-  
 
   }
   

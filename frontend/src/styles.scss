@@ -72,6 +72,19 @@ header{
       color: white;
   }
   
+  .title{
+     font-weight: 600; 
+     font-size: 1.1em;
+     padding-top: 30px;
+  }
+
+  hr{
+    border : 1px solid rgb(245, 232, 174);
+  }
+
+  .user{
+    float: left;
+}
 
   li{
       float:right;
@@ -181,6 +194,7 @@ h1, h2{
 
     .card{
     margin-top: -30px;
+    margin-bottom: 20px;
     width: 100%;
     }
 
@@ -190,4 +204,22 @@ h1, h2{
         font-weight: 600;
         background-color: rgb(223, 188, 113);
         border-radius: 5px;
+    }
+
+    .text-success{
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: 600;
+        background-color: white;
+        border-radius: 5px;
+    }
+
+    .fa-trash{
+        color: red;
+        font-size: 1.2em;
+    }
+
+    .button-trash{
+        background: transparent;
+        float: right;
     }

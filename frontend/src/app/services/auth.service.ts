@@ -7,7 +7,9 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
- 
+  
+  private userId!: number;
+
   constructor(
     private http: HttpClient,
     private router: Router, 
@@ -20,6 +22,7 @@ export class AuthService {
       this.http.post('http://localhost:3000/api/users/register',  {email, password, username, usersurname}).subscribe(
        () => {
           this.authboolean.next(true);
+         
           resolve({message:'Le compte est créer!'});
         },
         (error) => {
@@ -35,6 +38,8 @@ export class AuthService {
       this.http.post('http://localhost:3000/api/users/login',  {email, password}).subscribe(
         (data:any) => {
         sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('userId', data.userId);
+        this.userId =  data.userId;
         this.authboolean.next(true);
           resolve();
         },
@@ -45,9 +50,15 @@ export class AuthService {
       );
   }
 
+  getUserId() {
+    return this.userId;
+  }
+
+
   signoutUser(){
     this.authboolean.next(false);
     sessionStorage.removeItem( "token" ) ;
+    sessionStorage.removeItem( "userId" ) ;
   }
 
   

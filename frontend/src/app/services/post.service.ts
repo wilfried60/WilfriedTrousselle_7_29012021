@@ -26,32 +26,24 @@ export class PostService {
   
   //on créer un post
   createPost(post:any): Observable<Post> {
-    return this.httpClient.post<Post>('http://localhost:3000/api/users/message', post)
+    return this.httpClient.post<Post>('http://localhost:3000/api/users/message/', post)
     .pipe(
       catchError(this.errorHandler)
     )
   }  
-
-  //on récupère le post de l'utilisateur
-  getPostById(id: string): Observable<Post> {
-    return this.httpClient.get<Post>('http://localhost:3000/api/users/message' + id)
-    .pipe(
-      catchError(this.errorHandler)
-    )
-  }
   
   //l'utilisateur modifie son post
-  updatePost(id: string, post: any): Observable<Post> {
-    return this.httpClient.put<Post>('http://localhost:3000/api/users/message' + id, post)
+  updatePost(id: number, post: any): Observable<Post> {
+    return this.httpClient.put<Post>('http://localhost:3000/api/users/message/' + id, post)
     .pipe(
       catchError(this.errorHandler)
     )
   }
   
   // l'utilisateur supprime son post
-  deletePost(id: string){
-    return this.httpClient.delete<Post>('http://localhost:3000/api/users/message' + id,)
-    .pipe(
+  deletePost(id: number){
+    return this.httpClient.delete<Post>('http://localhost:3000/api/users/message/' + id)
+    .pipe(    
       catchError(this.errorHandler)
     )
   }

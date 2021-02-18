@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../services/post.service';
-
-
-
-
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post',
@@ -11,24 +9,30 @@ import { PostService } from '../services/post.service';
   styleUrls: ['./post.component.scss']
 })
 export class PostComponent implements OnInit {
-
-  errorMSG:any;
-  data: any;
+  
+  errorMSG!:string;
   posts: any;
-  postsUser: any;
+  userid!:any;
+  msg!: string;
+
  
   constructor(
     public PostService: PostService,
-
+    private AuthService: AuthService,
+    private router: Router, 
      ) { }
      
      
 
      ngOnInit() {
+
+
       this.PostService.getPostAll().subscribe(
         (posts)=>{
+        
         this.posts = posts.message;
-        console.log(this.posts);
+    
+        this.userid = sessionStorage.getItem('userId');
       },
       (error) =>{
         this.errorMSG = error.error;
@@ -37,7 +41,20 @@ export class PostComponent implements OnInit {
       )  
            
         }
-       
-  };
 
+        deletePostU(id: number) {
+          this.PostService.deletePost(id).subscribe(
+            (data) => {
+              console.log(data.message);
+              this.msg = 'votre post est bien supprimé';
+              window.location.reload();
+            },
+            (error) => {
+              this.errorMSG = error.error;
+            }
+          )
+            
+          
+        }
+};
  

@@ -17,13 +17,14 @@ export class AuthGuardService implements CanActivate{
       (resolve, reject) => {
         this.auth.authboolean.subscribe(
           (auth) => {
-            if (auth) {
+            if (auth || sessionStorage.getItem("token")) {
               resolve(true);
             } else {
               this.router.navigate(['/login']);
               resolve(false);
             }
+           
       })});
     };
-};
 
+};

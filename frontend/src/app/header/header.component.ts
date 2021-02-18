@@ -23,6 +23,9 @@ export class HeaderComponent implements OnInit {
     this.auths = this.auth.authboolean.subscribe(
       (auth) => {
           this.isauth = auth;
+          if (sessionStorage.getItem("token")) {
+            this.isauth = true;
+          }
        
       }
     );
@@ -30,6 +33,7 @@ export class HeaderComponent implements OnInit {
 
   signout() {
     this.auth.signoutUser();
+    window.location.reload();
   }
 
   ngOnDestroy() {
