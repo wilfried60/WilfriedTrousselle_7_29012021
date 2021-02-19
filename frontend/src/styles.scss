@@ -61,6 +61,10 @@ header{
     float: left;
   
   }
+
+  .conteneur{
+      height: 50px;
+  }
   
   .logo-menu img{
     padding-top: 20px;
@@ -75,11 +79,12 @@ header{
   .title{
      font-weight: 600; 
      font-size: 1.1em;
-     padding-top: 30px;
+     margin-top: 30px;
   }
 
   hr{
-    border : 1px solid rgb(245, 232, 174);
+    border : 1px solid rgb(8, 159, 230);
+    top: 20px;
   }
 
   .user{
@@ -196,6 +201,7 @@ h1, h2{
     margin-top: -30px;
     margin-bottom: 20px;
     width: 100%;
+    background: transparent;
     }
 
     .text-danger{
@@ -223,3 +229,37 @@ h1, h2{
         background: transparent;
         float: right;
     }
+    .button-trash_comment{
+        background: transparent;
+        float: right;
+        margin-right: 10px;
+        margin-top:10px;
+    }
+
+    .commentaire{
+        margin-left: 0;
+        color: black;
+        margin-top: 20px;
+        border-radius: 5px;
+        border: 1px solid black;
+        min-height: 30px;
+        width: 100%;
+        background-color: white;
+    }
+
+    .user-commentaire{
+        text-decoration: underline;
+        padding-top: 5px;
+        font-weight: 600;
+        text-align: left;
+        width: 100%;
+        margin-left: 20px;
+    }
+   
+  .post img{
+      width: 50px;
+  }
+
+  .user img{
+    width: 70px;
+}

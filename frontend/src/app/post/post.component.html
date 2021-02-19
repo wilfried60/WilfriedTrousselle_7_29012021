@@ -2,33 +2,50 @@
     <div class="cadre-post">
         <p class="text-danger">{{ errorMSG }}</p>
         <p class="text-success">{{ msg }}</p>
-       <div class="post" >
-        <div class="card" >
-            
-            <div class="card-body">
-              
-              </div>
-             
+      
               <button class="btn btn-primary" type="submit">
                    <a routerLink="../post/create" title="Créer un post" >Créer un post</a>
                 </button>
 
-                 <div class="card-body" *ngFor="let post of posts">
-                  <div class="post">
+                 
+                  <div class="post" *ngFor="let post of posts">
                    
                     <button type="button" class="button-trash" *ngIf="userid == post.User.id" (click)="deletePostU(post.id)">
                       <i class="fas fa-trash" aria-hidden="true"></i>
                     </button>
-                  <p class="user" *ngIf="post.contenu">{{post.User.username}} {{post.User.usersurname}}</p>
-                   <p class="title" *ngIf="post.title"> {{post.title}} </p>
-                   <hr>
+                    <div class="conteneur">
+                  <p class="user" *ngIf="post.contenu">
+                  <img src="./assets/profile.png" alt="Photo de profil">{{post.User.username}} {{post.User.usersurname}}</p>
+                    </div>
+                  <p class="title" *ngIf="post.title"> {{post.title}} </p>
+                 
                      <p  *ngIf="post.imageURL"> {{post.imageURL}} </p>
                      <p  *ngIf="post.contenu"> {{post.contenu}}</p> 
+                      
                      
+                     <div  *ngFor="let commentaire of commentaires" >
+                       <div class="commentaire" *ngIf="commentaire.MessageId == post.id">
+                        <button type="button" class="button-trash_comment" *ngIf="userid == commentaire.UserId" (click)="deletecommentaire(commentaire.id)">
+                          <i class="fas fa-trash" aria-hidden="true"></i>
+                        </button>
+                      <p class="user-commentaire" ><img src="./assets/profile.png" alt="Photo de profil">{{commentaire.username}} {{commentaire.usersurname}}</p>
+      
+                      <p class="comment" > {{commentaire.commentaire}} </p>
                     </div>
-               </div>
-          </div>
-    </div> 
-    </div>
-    </main> 
+                  </div>
+              
+                     <form [formGroup]="FormGroup" (ngSubmit)="onSubmitcomment(post.id)">
+                      
+                      <div class="form-group">
+                        <div class="input-group-prepend">
+                          <label for="commentaire" class="text-color" ></label>
+                        </div>
+                        <textarea class="form-control" formControlName="commentaire" placeholder="Répondez quelque chose..."></textarea>
+                        </div>
+                      <button class="btn btn-danger center-block" type="submit">répondre!</button>
+                    </form>
+
+                   </div> 
+                     </div>
+                       </main> 
     

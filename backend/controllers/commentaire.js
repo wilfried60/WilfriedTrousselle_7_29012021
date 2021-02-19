@@ -14,6 +14,11 @@ exports.createcommentaire= (req, res, next) => {
       let username = req.body.username;
       let usersurname = req.body.usersurname;
       let MessageId = req.params.id;
+      let UserId = req.body.UserId;
+
+      if (commentaire == ""  || username == null || usersurname == null  || MessageId == null || UserId == null){
+        return res.status(400).json({'error': 'commentaire introuvable'})
+         }
 
      models.Message.findOne({
         where: { id: MessageId}
@@ -50,11 +55,11 @@ exports.getcommentaire= (req, res, next) => {
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
-      let MessageId = req.params.id;
+     
 
       models.Commentaire.findAll({
           attributes:['id', 'commentaire', 'username', 'usersurname', 'MessageId', 'UserId'],
-        where: {MessageId: MessageId },  
+         
     })
 
        .then((commentaire) => {
@@ -77,17 +82,17 @@ exports.getcommentaire= (req, res, next) => {
           return res.status(400).json({ 'error': 'mauvaise identification' });
     
           let commentaires = req.params.id;
-          let message = req.body.messageid;
+         
          
     
           models.Commentaire.findOne({
-            where: {id: commentaires, UserId: userId, MessageId : message},  
+            where: {id: commentaires},  
         })
     
            .then((commentaire) => {
             if (commentaire) {
                 models.Commentaire.destroy({
-                     where: { id: commentaires, UserId: userId, MessageId : message } 
+                     where: { id: commentaires } 
                     })
                 return res.status(200).json({ message: "Votre commentaire est bien supprimé!"});
         

@@ -39,6 +39,8 @@ export class AuthService {
         (data:any) => {
         sessionStorage.setItem('token', data.token);
         sessionStorage.setItem('userId', data.userId);
+        sessionStorage.setItem('username', data.username);
+        sessionStorage.setItem('usersurname', data.usersurname);
         this.userId =  data.userId;
         this.authboolean.next(true);
           resolve();

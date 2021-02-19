@@ -23,7 +23,7 @@ export class CreateComponent implements OnInit {
       this.FormGroup = this.formBuilder.group({
   
         title: [''],
-        contenu: ['',Validators.required],
+        contenu:['', [Validators.required]],
        
       
       })
@@ -33,8 +33,10 @@ export class CreateComponent implements OnInit {
   }
 
   onSubmit() {
-    
-    this.postService.createPost(this.FormGroup.value)
+    const title = this.FormGroup.get('title')?.value;
+    const contenu = this.FormGroup.get('contenu')?.value;
+
+    this.postService.createPost(title, contenu)
     .subscribe(() => {
         console.log('le post est bien enregistré!'),
         this.router.navigateByUrl('/post')

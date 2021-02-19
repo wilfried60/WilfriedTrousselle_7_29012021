@@ -15,11 +15,11 @@ Router.delete('/users/message/:id',messageCtrl.deleteMessage);
 
 
 //like
-Router.post('/users/message/:id/like',likeCtrl.like);
+Router.post('/users/message/:id/like',likeCtrl.like); 
 
 //commentaire
 Router.post('/users/:id/commentaire',commentaireCtrl.createcommentaire);
 Router.delete('/users/commentaire/:id',commentaireCtrl.deletecommentaire);
-Router.get('/users/commentaire/:id',commentaireCtrl.getcommentaire);
+Router.get('/users/commentaire',commentaireCtrl.getcommentaire);
 
 module.exports = Router;

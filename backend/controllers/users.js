@@ -92,7 +92,11 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
                         return res.status(200).json({ 
                             'userId': user.id, 
                             'token': auth.USERtoken(user),
-                            'message': `Hello ${user.username}!`});
+                            'message': `Hello ${user.username}!`,
+                            'usersurname': user.usersurname,
+                            'username': user.username
+                          });
+                            
                           
                 } else {
                 return res.status(403).json({ 'error': 'mot de passe invalide' });

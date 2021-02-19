@@ -50,7 +50,7 @@ export class SignupComponent implements OnInit {
             })
             .catch(
             (error) => {
-              this.msgerror = error.message;
+              this.msgerror = error.error;
             }); 
         })
         .catch(
