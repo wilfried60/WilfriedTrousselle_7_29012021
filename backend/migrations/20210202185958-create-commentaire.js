@@ -22,11 +22,20 @@ module.exports = {
       },
       MessageId: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Messages',
+          key: 'id'
+        },
+        
       },
       UserId: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id'
+        },
       },
       createdAt: {
         allowNull: false,

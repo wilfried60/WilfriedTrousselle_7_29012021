@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { User } from '../models/user';
+import { catchError } from 'rxjs/internal/operators/catchError';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +13,18 @@ export class AuthService {
   private userId!: number;
 
   constructor(
-    private http: HttpClient,
+    private httpClient: HttpClient,
     private router: Router, 
   ) { }
   
   authboolean = new BehaviorSubject<boolean>(false);
+
+
+  // l'utilisateur s'inscrit
   signupUser( email:string, password: string, username:string, usersurname:string) {
     
     return new Promise((resolve, reject) =>{
-      this.http.post('http://localhost:3000/api/users/register',  {email, password, username, usersurname}).subscribe(
+      this.httpClient.post('http://localhost:3000/api/users/register',  {email, password, username, usersurname}).subscribe(
        () => {
           this.authboolean.next(true);
          
@@ -32,10 +37,10 @@ export class AuthService {
       );
   }
  
-
+  // L'utilisateur se connecte
   signinUser( email:string, password: string) {
     return new Promise<void>((resolve, reject) =>{
-      this.http.post('http://localhost:3000/api/users/login',  {email, password}).subscribe(
+      this.httpClient.post('http://localhost:3000/api/users/login',  {email, password}).subscribe(
         (data:any) => {
         sessionStorage.setItem('token', data.token);
         sessionStorage.setItem('userId', data.userId);
@@ -52,9 +57,38 @@ export class AuthService {
       );
   }
 
-  getUserId() {
-    return this.userId;
+  // on récupère l'utilisateur
+
+  getOnUser(id:number): Observable<User> {
+    return this.httpClient.get<User>('http://localhost:3000/api/users/profil/'+ id)
+    .pipe(
+      catchError(this.errorHandler)
+    )
   }
+
+  //l'utilisateur modifie son post
+  updateUser(id: number, email:string, description: string, username:string, usersurname:string): Observable<User> {
+    return this.httpClient.put<User>('http://localhost:3000/api/users/profil/' + id, {email, description, username, usersurname})
+    .pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
+   // Supression de l'utilisateur
+   deleteProfil(id: number){
+    return this.httpClient.delete<User>('http://localhost:3000/api/users/profil/' + id)
+    .pipe(    
+      catchError(this.errorHandler)
+    )
+  }
+
+   // on renvoie l'erreur du serveur
+   errorHandler(error:any) {
+    let errorMessage = '';
+      errorMessage = error.error;
+    console.log(errorMessage);
+    return throwError(errorMessage);
+ }
 
 
   signoutUser(){

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { PostService } from '../services/post.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
@@ -18,10 +18,15 @@ export class PostComponent implements OnInit {
   msg!: string;
   FormGroup!: FormGroup;
   commentaires!: any;
+  likesBoolean!: boolean;
+  messageId!:number;
+  likes!:any;
+  likesnumber!:number;
 
   constructor(
     public formBuilder: FormBuilder,
     public PostService: PostService,
+    private router : Router
    
      ) {
       this.FormGroup = this.formBuilder.group({
@@ -38,7 +43,7 @@ export class PostComponent implements OnInit {
 
      ngOnInit() {
 
-
+       // on affiche tout les posts
       this.PostService.getPostAll().subscribe(
         (posts)=>{
         
@@ -65,7 +70,29 @@ export class PostComponent implements OnInit {
       
       )  
 
+      // on affiche tout les likes
+      this.PostService.getLikePost().subscribe(
+        (likes)=>{
+        
+        this.likes = likes.like;
+          
+      },
+      (error) =>{
+        this.errorMSG = error.error;
+      }
+      
+      )  
+
         }
+
+        // modification du post
+        PostUpdate(id:string) {
+          this.router.navigate(['/post/post-user',id]);
+          sessionStorage.setItem('idmessage', id);
+        }
+      
+
+        // l'utilisateur supprime son post
 
         deletePostU(id: number) {
           this.PostService.deletePost(id).subscribe(
@@ -82,6 +109,8 @@ export class PostComponent implements OnInit {
           
         } 
 
+        // l'utilisateur envoie un commentaire au post
+
         onSubmitcomment(id: number ) {
           const commentaire = this.FormGroup.get('commentaire')?.value;
           const username = sessionStorage.getItem('username')!;
@@ -95,6 +124,8 @@ export class PostComponent implements OnInit {
               console.log(error.error);
           });
         }
+        
+        // l'utilisateur supprime son commentaire
 
         deletecommentaire(id: number) {
           this.PostService.deleteComment(id).subscribe(
@@ -110,5 +141,30 @@ export class PostComponent implements OnInit {
             
           
         } 
+
+          // l'utilisateur Like un post
+
+          LikePosts(id: number ) {
+            const MessageId = id;
+            const UserId = sessionStorage.getItem('userId')!;
+            this.PostService.LikePost(id, MessageId, UserId )
+            .subscribe((data:any) => {
+             
+              if (data.like == 0 && MessageId == data.messageid) {
+                this.messageId = MessageId;
+                this.likesBoolean = false;
+                
+              } else if (data.like == 1 && MessageId == data.messageid){
+                this.likesBoolean = true;
+                this.messageId = MessageId;
+              }
+              console.log(this.likesBoolean, this.messageId);
+              }, (error) => {
+                console.log(error.error);
+            });
+          }
+  
+          
 };
+
  

@@ -23,6 +23,7 @@ body{
 }
 
 main{
+    margin: auto;
     width: 100%;
     min-height: 100vh;
 }
@@ -83,12 +84,14 @@ header{
   }
 
   hr{
-    border : 1px solid rgb(8, 159, 230);
+    border : 1px solid rgb(3, 98, 143);
     top: 20px;
   }
 
   .user{
     float: left;
+    color:rgb(59, 112, 172);
+    font-weight: 600;
 }
 
   li{
@@ -174,11 +177,7 @@ h1, h2{
 -moz-box-shadow: -1px 0px 24px 6px rgba(0,0,0,0.75);
 }
 
-@media all and (min-width: 1000px) {
-    .cadre-post {
-        width: 70%;
-    }
-  }
+
 
 
 .post{
@@ -227,7 +226,8 @@ h1, h2{
 
     .button-trash{
         background: transparent;
-        float: right;
+        float: left;
+        margin-top: -30px;
     }
     .button-trash_comment{
         background: transparent;
@@ -248,12 +248,12 @@ h1, h2{
     }
 
     .user-commentaire{
-        text-decoration: underline;
         padding-top: 5px;
         font-weight: 600;
         text-align: left;
         width: 100%;
         margin-left: 20px;
+        color:rgb(59, 112, 172);
     }
    
   .post img{
@@ -263,3 +263,85 @@ h1, h2{
   .user img{
     width: 70px;
 }
+
+.like-post{
+    margin: auto;
+    padding-top: 20px;
+    float:right;
+}
+
+.thumbs-gris, .thumbs-vert{
+    
+    position: absolute;
+    font-size: 1.8em;
+    cursor: pointer;
+    margin-top: -15px;
+    color: #747474;
+    transition: all 1s linear;
+    right: 50px;
+     
+    }
+    
+    .thumbs-vert {
+
+     background: rgba(3, 192, 13, 0.7);
+     background: linear-gradient(360deg,  rgba(5, 231, 16, 0.7) 0%,  rgba(3, 211, 13, 0.726) 0%,  rgb(34, 114, 38) 93%);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+  }  
+
+  .thumbs-gris {
+    color: rgba(105, 105, 105, 0.7);
+  
+ }  
+
+  .nbLike{
+      position: absolute;
+      font-size: 1.1em;
+      color:rgba(105, 105, 105, 0.7);
+      right: 85px;
+      margin-top:-7px;
+  }
+
+  @media all and (min-width: 1240px) {
+    .thumbs-gris, .thumbs-vert{
+
+        right: 100px;
+         
+        }
+
+        .nbLike{
+            right: 135px;
+        }
+  }
+
+  .button-trash-right{
+      float: right;
+      background: green;
+      margin-top: -34px;
+      height: 35px;
+  }
+
+  .heure{
+      display: block;
+      color:rgb(90, 88, 88);
+      margin-top:-15px;
+      margin-left: 60px;
+      font-size: 0.8em;
+
+  }
+
+  .heure-commentaire{
+    display: block;
+    color:rgb(90, 88, 88);
+    margin-top:-11px;
+    margin-left: 30px;
+    font-size: 0.8em;
+
+}
+
+
+
+ 
+  
+  

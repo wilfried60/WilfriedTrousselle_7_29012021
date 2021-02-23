@@ -58,7 +58,7 @@ exports.getcommentaire= (req, res, next) => {
      
 
       models.Commentaire.findAll({
-          attributes:['id', 'commentaire', 'username', 'usersurname', 'MessageId', 'UserId'],
+          attributes:['id', 'commentaire', 'username', 'usersurname', 'MessageId', 'UserId','createdAt'],
          
     })
 

@@ -1,6 +1,6 @@
 
-export class Post{
-    message!: [{
+export interface Post{
+    message: {
         id: number;
         title: string;
         contenu: string;
@@ -14,7 +14,7 @@ export class Post{
             usersurname: string;
             photoURL: string;
         }];
-    }];
+    };
         
     
 };

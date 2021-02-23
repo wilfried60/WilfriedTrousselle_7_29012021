@@ -158,7 +158,7 @@ exports.allMessage= (req, res, next) => {
     
 
 models.Message.findAll({
-    attributes:['id', 'title', 'contenu', 'imageURL', 'likes'],
+    attributes:['id', 'title', 'contenu', 'imageURL', 'likes','createdAt'],
     include: [{
         model: models.User,
         attributes: [ 'id', 'username', 'usersurname' ,'photoURL' ]

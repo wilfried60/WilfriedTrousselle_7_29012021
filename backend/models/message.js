@@ -17,7 +17,9 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
           },
           onDelete:'CASCADE',
-        })
+        }),
+        models.Message.hasMany(models.Commentaire);
+        models.Message.hasMany(models.Like);
       }
     }
   });

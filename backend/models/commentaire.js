@@ -26,21 +26,21 @@ module.exports = (sequelize, DataTypes) => {
         // associations can be defined here
         
         models.Commentaire.belongsTo(models.User, 
-        { foreignKey: {
-          allowNull: false
-         
-        }, 
-        onDelete:'CASCADE',
-      }),
-        models.Commentaire.belongsTo(models.Message, 
           { foreignKey: {
-            allowNull: false,
-               
-          },
-           onDelete:'CASCADE',
-        })
+            allowNull: false
+           
+          }, 
+          onDelete:'CASCADE',
+        }),
+          models.Commentaire.belongsTo(models.Message, 
+            { foreignKey: {
+              allowNull: false,
+                 
+            }, 
+            onDelete:'CASCADE',
+          })
+        }
       }
-    }
-  });
-  return Commentaire;
-};
+    });
+    return Commentaire;
+  };

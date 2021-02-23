@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Commentaire } from '../models/commentaire';
+import { Likes, LikesAll } from '../models/like';
 import { Post } from '../models/Post.model';
 
 
@@ -26,6 +27,14 @@ export class PostService {
       catchError(this.errorHandler)
     )
   }
+
+   //on récupère un post
+   getonPost(id:number): Observable<Post> {
+    return this.httpClient.get<Post>('http://localhost:3000/api/users/message/'+ id)
+    .pipe(
+      catchError(this.errorHandler)
+    )
+  }
   
   //on créer un post
   createPost(title:string, contenu:string): Observable<Post> {
@@ -36,8 +45,8 @@ export class PostService {
   }  
   
   //l'utilisateur modifie son post
-  updatePost(id: number, post: any): Observable<Post> {
-    return this.httpClient.put<Post>('http://localhost:3000/api/users/message/' + id, post)
+  updatePost(id: number, title:string, contenu:string): Observable<Post> {
+    return this.httpClient.put<Post>('http://localhost:3000/api/users/message/' + id, {title, contenu})
     .pipe(
       catchError(this.errorHandler)
     )
@@ -62,7 +71,7 @@ export class PostService {
     )
   }  
 
-  //on récupère les posts
+  //on récupère les commentaires
   getCommentaireAll(): Observable<Commentaire> {
     return this.httpClient.get<Commentaire>('http://localhost:3000/api/users/commentaire/')
     .pipe(
@@ -70,7 +79,7 @@ export class PostService {
     )
   }
 
-   // l'utilisateur supprime son post
+   // l'utilisateur supprime son commentaire
    deleteComment(id: number){
      console.log(id)
     return this.httpClient.delete<Commentaire>('http://localhost:3000/api/users/commentaire/' + id)
@@ -79,6 +88,28 @@ export class PostService {
     )
   }
   
+
+
+  ///////////////////////////////////////// partie Like ////////////////////////////
+
+  // L'utilisateur like un poste
+
+  LikePost(id:number,MessageId: number, UserId:string):Observable<Likes>{
+    console.log(id)
+    return this.httpClient.post<Likes>('http://localhost:3000/api/users/message/' + id +'/like', {MessageId, UserId})
+    .pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
+  // On récupère les likes d'un poste
+
+  getLikePost():Observable<LikesAll>{
+    return this.httpClient.get<LikesAll>('http://localhost:3000/api/users/like')
+    .pipe(
+      catchError(this.errorHandler)
+    )
+  }
    // on renvoie l'erreur du serveur
   errorHandler(error:any) {
      let errorMessage = '';

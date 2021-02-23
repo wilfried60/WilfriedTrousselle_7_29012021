@@ -10,12 +10,25 @@
                  
                   <div class="post" *ngFor="let post of posts">
                    
-                    <button type="button" class="button-trash" *ngIf="userid == post.User.id" (click)="deletePostU(post.id)">
-                      <i class="fas fa-trash" aria-hidden="true"></i>
-                    </button>
+                  
                     <div class="conteneur">
                   <p class="user" *ngIf="post.contenu">
-                  <img src="./assets/profile.png" alt="Photo de profil">{{post.User.username}} {{post.User.usersurname}}</p>
+                  <img src="./assets/profile.png" alt="Photo de profil">{{post.User.username}} {{post.User.usersurname}}<span class="heure">{{post.createdAt | date:'d MMM à h:mm a'}}</span></p>
+                   
+                 
+                  
+                  <div class="like-post">
+                    
+                    <i class="fas fa-thumbs-up thumbs-gris"  aria-hidden="true"  title="Vous aimez" (click)="LikePosts(post.id)" ></i>
+                    <div *ngFor="let like of likes;" >
+                      <span class="nbLike">{{post.likes}}</span>
+                    <div *ngIf="like.MessageId == post.id ">
+                  <i *ngIf="like.UserId == userid " class="fas fa-thumbs-up thumbs-vert" aria-hidden="true"  title="Vous aimez"  (click)="LikePosts(post.id)" ></i>
+                </div>
+                </div>
+               
+                </div>
+                   
                     </div>
                   <p class="title" *ngIf="post.title"> {{post.title}} </p>
                  
@@ -28,7 +41,7 @@
                         <button type="button" class="button-trash_comment" *ngIf="userid == commentaire.UserId" (click)="deletecommentaire(commentaire.id)">
                           <i class="fas fa-trash" aria-hidden="true"></i>
                         </button>
-                      <p class="user-commentaire" ><img src="./assets/profile.png" alt="Photo de profil">{{commentaire.username}} {{commentaire.usersurname}}</p>
+                      <p class="user-commentaire" ><img src="./assets/profile.png" alt="Photo de profil">{{commentaire.username}} {{commentaire.usersurname}}<span class="heure-commentaire">{{commentaire.createdAt | date:'d MMM à h:mm a'}}</span></p>
       
                       <p class="comment" > {{commentaire.commentaire}} </p>
                     </div>
@@ -45,6 +58,10 @@
                       <button class="btn btn-danger center-block" type="submit">répondre!</button>
                     </form>
 
+                    <button type="button" class="button-trash" *ngIf="userid == post.User.id" (click)="deletePostU(post.id)">
+                      <i class="fas fa-trash" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="button-trash-right" *ngIf="userid == post.User.id" (click)="PostUpdate(post.id)"> Modifier</button>
                    </div> 
                      </div>
                        </main> 

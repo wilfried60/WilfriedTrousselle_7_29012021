@@ -16,6 +16,7 @@ Router.delete('/users/message/:id',messageCtrl.deleteMessage);
 
 //like
 Router.post('/users/message/:id/like',likeCtrl.like); 
+Router.get('/users/like',likeCtrl.getlike); 
 
 //commentaire
 Router.post('/users/:id/commentaire',commentaireCtrl.createcommentaire);

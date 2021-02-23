@@ -1,10 +1,26 @@
 <main>
-    <div class="cadre-post">
-
-       <div class="post">
-           
+   <div class="cadre-auth">
+       <h2>Créer un post</h2>
+       <hr>
+       <div *ngIf="FormGroup">
+   <form  [formGroup]="FormGroup" (ngSubmit)="onSubmit()">
+        
+      <div>
+       <div class="form-group" >
+         <label for="title" class="text-color" >Titre</label>
+         <input type="text" class="form-control" id="title" formControlName="title" >
       
-    </div> 
+       </div>
+     
+       <div class="form-group">
+         <div class="input-group-prepend">
+           <label for="contenu" class="text-color" >contenu</label>
+         </div>
+         <textarea class="form-control" formControlName="contenu" required></textarea>
+         </div>
+      </div>
+       <button class="btn btn-danger center-block" type="submit">Modifier mon post!</button>
+     </form>
     </div>
-    </main> 
-    
+   </div> 
+   </main>

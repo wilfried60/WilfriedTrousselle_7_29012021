@@ -15,21 +15,26 @@ exports.like= (req, res, next) => {
         where: { id: messageID },
         
     })
-
     .then((message) => {
     if (message) {
       models.Like.findOne({
         where: { UserId: userId, MessageId: messageID },
-        
+  
     })
 
        .then((user) => {
+
           if (user) {
             models.Like.destroy({
                 where: { UserId: userId, MessageId: messageID },           
             });
+             
+            message.update({
+                likes: message.likes -1
+            });
 
-            return res.status(200).json({ message: 'votre like est bien supprimé!'});
+            return res.status(200).json({ 'like': 0,
+                                           'messageid': messageID});
     
         } else {
             models.Like.create({
@@ -37,8 +42,13 @@ exports.like= (req, res, next) => {
                 MessageId: messageID,
                
             });
+
+            message.update({
+                likes: message.likes +1
+            });
            
-            return res.status(201).json({ message: 'votre like est bien ajouté!'});
+            return res.status(201).json({ 'like': 1,
+                                         'messageid': messageID});
         }
 
         
@@ -55,6 +65,32 @@ exports.like= (req, res, next) => {
     .catch((err) => res.status(500).json({ 'error': 'Une erreur est survenue!' })) ;
 
 }
+
+//Récupération des likes
+exports.getlike= (req, res, next) => {
+    let headerAuth = req.headers['authorization'];
+    let userId = auth.userid(headerAuth);
+      if (!userId)
+        return res.status(400).json({ 'error': 'mauvaise identification' });
+  
+        models.Like.findAll({
+            attributes:['id', 'MessageId', 'UserId'],
+           
+      })
+  
+         .then((like) => {
+          if (like) {
+              return res.status(200).json({like});
+      
+          } else {
+              return res.status(500).json({ 'error': 'Aucun Commentaire!' });
+          }
+      })
+      .catch((err) => res.status(500).json({ 'error': 'Une erreur est survenue!' })); 
+      
+      }
+  
+  
 
     
 
