@@ -50,7 +50,7 @@ exports.createcommentaire= (req, res, next) => {
 
 // affichage des commentaire d'un message
 exports.getcommentaire= (req, res, next) => {
-    let headerAuth = req.headers['authorization'];
+    let headerAuth = req.headers['authorization']; 
     let userId = auth.userid(headerAuth);
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
@@ -59,7 +59,10 @@ exports.getcommentaire= (req, res, next) => {
 
       models.Commentaire.findAll({
           attributes:['id', 'commentaire', 'username', 'usersurname', 'MessageId', 'UserId','createdAt'],
-         
+          include: [{
+        model: models.User,
+        attributes: [ 'id', 'username', 'usersurname' ,'photoURL' ]
+      }]
     })
 
        .then((commentaire) => {

@@ -1,10 +1,20 @@
-.img-profil img{
+
+.img-profil{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.img-profil-origin{
     width: 200px;
+    height: 150px;
     border-radius: 50%;
     margin-left:-24px;
 }
-.img-profil{
+
+.img-profil-user{
     width: 150px;
-    border-radius: 50%;
-    background-color: white;
+    height: 150px;
+    border-radius: 50%;   
 }

@@ -34,16 +34,8 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
         if (regex_pass.test(password) == false) {
             return res.status(400).json({ 'error': 'mot de passe invalide' });
         }
-    
-
-        if (photoURL != null) {
-          photoURL = `${req.protocol}://${req.get("host")}/images/${
-            req.file.filename
-          }`;
-        } else {
-          photoURL = null;
-        }
-
+        
+       
         models.User.findOne({
             attributes: ['email'],
             where: { email: email }
@@ -57,7 +49,6 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
                                 username: username,
                                 usersurname: usersurname,
                                 password: bcryptedPassword,
-                                photoURL: photoURL,
                                 description: description,
                                 isAdmin: false
                             })
@@ -94,7 +85,8 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
                             'token': auth.USERtoken(user),
                             'message': `Hello ${user.username}!`,
                             'usersurname': user.usersurname,
-                            'username': user.username
+                            'username': user.username,
+                            
                           });
                             
                           
@@ -146,11 +138,12 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
     let iduser = req.params.id;
     if (userId != iduser )
       return res.status(400).json({ 'error': 'mauvaise identification' });
+  
 
       let description = req.body.description;
       let username = req.body.username;
       let usersurname = req.body.usersurname;
-      let photoURL = req.body.photoURL;
+      let photoURL =  `${req.protocol}://${req.get("host")}/images/${ req.file.filename}`;
       let email = req.body.email;
 
     models.User.findOne({
@@ -163,7 +156,7 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
          username: (username ? username: user.username),
          usersurname: (usersurname ? usersurname: user.usersurname),
          description: (description ? description: user.description),
-         photoURL: (photoURL ? photoURL: user.photoURL)
+         photoURL: (photoURL ? photoURL: ima)
        })
         return  res.status(201).json(user);
 

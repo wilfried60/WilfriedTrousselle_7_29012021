@@ -2,15 +2,16 @@ const express = require('express');
 const messageCtrl = require('../controllers/message');
 const likeCtrl = require('../controllers/like');
 const commentaireCtrl = require('../controllers/commentaire');
+const multer = require('../middleware/multer-config');
 const Router = express.Router();
 
 
 // message
 
-Router.post('/users/message/',messageCtrl.createMessage);
+Router.post('/users/message/', multer, messageCtrl.createMessage);
 Router.get('/users/message/',messageCtrl.allMessage);
 Router.get('/users/message/:id',messageCtrl.oneMessage);
-Router.put('/users/message/:id',messageCtrl.modifyMessage);
+Router.put('/users/message/:id', multer, messageCtrl.modifyMessage);
 Router.delete('/users/message/:id',messageCtrl.deleteMessage);
 
 

@@ -5,6 +5,7 @@ export interface Post{
         title: string;
         contenu: string;
         imageURL: string;
+        likes:number;
         createdAt: string;
         updatedAt: string;
 
@@ -13,8 +14,9 @@ export interface Post{
             username: string;
             usersurname: string;
             photoURL: string;
+
+           
         }];
     };
-        
     
 };

@@ -10,17 +10,15 @@ const fs = require('fs');
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
       
-      let title = req.body.title;
-      let contenu = req.body.contenu;
-      let imageURL = req.body.imageURL;
+      const title = req.body.title;
+      const contenu = req.body.contenu;
+      let image = req.file;
     
 
-      if (imageURL != null) {
-        imageUrl = `${req.protocol}://${req.get("host")}/images/${
-          req.file.filename
-        }`;
+      if (image != null) {
+        image = `${req.protocol}://${req.get("host")}/images/${ req.file.filename}`;
       } else {
-        imageUrl = null;
+        image = null;
       }
 
       if (contenu == null){
@@ -28,14 +26,14 @@ const fs = require('fs');
            }
 
        models.User.findOne({
-           where: { id: userId}
+           where: { id: userId} 
        })
        .then((user) => {
                if (user) {
                    models.Message.create({
                        title: title,
                        contenu: contenu,
-                       imageURL: imageURL,
+                       imageURL: image,
                        likes: 0,
                        dislikes: 0,
                        UserId: user.id
@@ -132,7 +130,7 @@ exports.deleteMessage= (req, res, next) => {
         
         .then((message) => {
             if (message.imageURL !== null) {
-              let filename = user.photo.split("/images")[1];
+              let filename = message.imageURL.split("/images")[1];
               fs.unlink(`images/${filename}`, () => {
                 // s'il y a une image, on supprimme tout
                 models.Message.destroy({ where: { id: messageID } });

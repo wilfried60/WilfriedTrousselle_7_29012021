@@ -3,15 +3,25 @@
         <h2>Mon profil</h2>
         <hr>
         <div *ngIf="FormGroup">
-        <div class="img-profil">
-        <img src="./assets/profile.png" alt="Photo de profil">
-    </div>
+        
 
     <button type="button" class="btn btn-danger" id="bouton" (click)="deleteProfils()">
       Supprimer mon compte
      </button>
      
-    <form [formGroup]="FormGroup" (ngSubmit)="onSubmit()">
+    <form [formGroup]="FormGroup" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label for="file" class="text-color">Ajoutez une image</label>
+        <input accept="image/*" id="photoURL" type="file"  class="form-control" (change)="onFileChange($event)">
+    </div>
+    <div class="img-profil">
+      <img src="./assets/profile.png" class="img-profil-origin"  *ngIf="!photoSrc" alt="Photo de profil">
+        <img [src]="photoSrc" class="img-profil-user" *ngIf="photoSrc"  alt="Photo de profil">
+  </div>
+       
+   
+    
         <div class="form-group">
           <label for="username" class="text-color" >Nom</label>
           <input type="text" class="form-control" id="username" formControlName="username"  required >

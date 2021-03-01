@@ -1,8 +1,9 @@
 <main>
     <div class="cadre-post">
-        <p class="text-danger">{{ errorMSG }}</p>
-        <p class="text-success">{{ msg }}</p>
-      
+        <p class="text-success"></p>
+        <div *ngIf="!postBoolean">
+        <p class="text-success" >{{ msg }}</p>
+      </div>
               <button class="btn btn-primary" type="submit">
                    <a routerLink="../post/create" title="Créer un post" >Créer un post</a>
                 </button>
@@ -13,26 +14,26 @@
                   
                     <div class="conteneur">
                   <p class="user" *ngIf="post.contenu">
-                  <img src="./assets/profile.png" alt="Photo de profil">{{post.User.username}} {{post.User.usersurname}}<span class="heure">{{post.createdAt | date:'d MMM à h:mm a'}}</span></p>
+                  <img src="./assets/profile.png" *ngIf="!post.User.photoURL" alt="Photo de profil">
+                   <img [src]="post.User.photoURL"  *ngIf="post.User.photoURL" class="imagePost"> {{post.User.username}} {{post.User.usersurname}}<span class="heure">{{post.createdAt | date:'d MMM à h:mm a'}}</span></p>
                    
                  
                   
                   <div class="like-post">
                     
                     <i class="fas fa-thumbs-up thumbs-gris"  aria-hidden="true"  title="Vous aimez" (click)="LikePosts(post.id)" ></i>
-                    <div *ngFor="let like of likes;" >
-                      <span class="nbLike">{{post.likes}}</span>
-                    <div *ngIf="like.MessageId == post.id ">
-                  <i *ngIf="like.UserId == userid " class="fas fa-thumbs-up thumbs-vert" aria-hidden="true"  title="Vous aimez"  (click)="LikePosts(post.id)" ></i>
-                </div>
+                    <span class="nbLike">{{post.likes}}</span>
+                    <div *ngFor="let like of likes;" >                  
+                  <i *ngIf="like.UserId == userid && like.MessageId == post.id" class="fas fa-thumbs-up thumbs-vert" aria-hidden="true"  title="Vous aimez"  (click)="LikePosts(post.id)" ></i>  
                 </div>
                
                 </div>
                    
                     </div>
                   <p class="title" *ngIf="post.title"> {{post.title}} </p>
-                 
-                     <p  *ngIf="post.imageURL"> {{post.imageURL}} </p>
+                     <div class="postimage">
+                     <p  *ngIf="post.imageURL"> <img [src]="post.imageURL" class="imagePost"> </p>
+                    </div>
                      <p  *ngIf="post.contenu"> {{post.contenu}}</p> 
                       
                      
@@ -41,7 +42,8 @@
                         <button type="button" class="button-trash_comment" *ngIf="userid == commentaire.UserId" (click)="deletecommentaire(commentaire.id)">
                           <i class="fas fa-trash" aria-hidden="true"></i>
                         </button>
-                      <p class="user-commentaire" ><img src="./assets/profile.png" alt="Photo de profil">{{commentaire.username}} {{commentaire.usersurname}}<span class="heure-commentaire">{{commentaire.createdAt | date:'d MMM à h:mm a'}}</span></p>
+                      <p class="user-commentaire" ><img src="./assets/profile.png" *ngIf="!commentaire.User.photoURL" alt="Photo de profil">
+                        <img [src]="commentaire.User.photoURL" class="photo-profil"  *ngIf="commentaire.User.photoURL"> {{commentaire.username}} {{commentaire.usersurname}} <span class="heure-commentaire"> {{commentaire.createdAt | date:'d MMM à h:mm a'}}</span></p>
       
                       <p class="comment" > {{commentaire.commentaire}} </p>
                     </div>

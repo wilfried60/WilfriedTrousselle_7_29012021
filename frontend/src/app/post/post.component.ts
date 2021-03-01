@@ -1,9 +1,10 @@
-import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { PostService } from '../services/post.service';
-import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Commentaire } from '../models/commentaire';
+import { Subscription } from 'rxjs';
+
+
 
 @Component({
   selector: 'app-post',
@@ -12,17 +13,19 @@ import { Commentaire } from '../models/commentaire';
 })
 export class PostComponent implements OnInit {
   
+  subscription!: Subscription;
   errorMSG!:string;
   posts: any;
-  userid!:any;
+  userid:any =sessionStorage.getItem('userId');
   msg!: string;
   FormGroup!: FormGroup;
   commentaires!: any;
   likesBoolean!: boolean;
+  postBoolean!: boolean;
   messageId!:number;
   likes!:any;
   likesnumber!:number;
-
+  
   constructor(
     public formBuilder: FormBuilder,
     public PostService: PostService,
@@ -44,18 +47,31 @@ export class PostComponent implements OnInit {
      ngOnInit() {
 
        // on affiche tout les posts
-      this.PostService.getPostAll().subscribe(
-        (posts)=>{
-        
-        this.posts = posts.message;
+       this.subscription = this.PostService.postSubject.subscribe(
+        (posts) => {
+          console.log(posts);
+          this.posts = posts.message;
+          this.userid ;
+
+          if (this.posts == ''){
+            this.postBoolean = false;
+            this.msg = 'aucun post n\'est publié!';
+          } else {
+            this.postBoolean = true;
+           
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.errorMSG = error.error;
+        }
+      );
+         
+      this.PostService.getPostAll();
+     
+     
     
-        this.userid = sessionStorage.getItem('userId');
-      },
-      (error) =>{
-        this.errorMSG = error.error;
-      }
-      
-      )  
+  
 
       // on affiche tout les commentaires
       this.PostService.getCommentaireAll().subscribe(
@@ -69,19 +85,23 @@ export class PostComponent implements OnInit {
       }
       
       )  
+      this.PostService.getCommentaireAll();
 
-      // on affiche tout les likes
-      this.PostService.getLikePost().subscribe(
+     
+      
+       // on affiche tout les likes
+       this.PostService.getLikePost().subscribe(
         (likes)=>{
-        
-        this.likes = likes.like;
-          
+        this.likes = likes.like; 
       },
       (error) =>{
         this.errorMSG = error.error;
       }
       
       )  
+    
+      
+      
 
         }
 
@@ -116,7 +136,7 @@ export class PostComponent implements OnInit {
           const username = sessionStorage.getItem('username')!;
           const usersurname = sessionStorage.getItem('usersurname')!;
           const UserId = sessionStorage.getItem('userId')!;
-          this.PostService.createcomment(id, commentaire, username, usersurname, UserId )
+          this.PostService.createcomment(id, commentaire, username, usersurname, UserId)
           .subscribe(() => {
             window.location.reload();
            
@@ -129,16 +149,15 @@ export class PostComponent implements OnInit {
 
         deletecommentaire(id: number) {
           this.PostService.deleteComment(id).subscribe(
-            (data) => {
-              console.log(data.commentaire);
-              this.msg = 'votre post est bien supprimé';
+            () => {
+              console.log('votre Commentaire est bien supprimé');
               window.location.reload();
             },
             (error) => {
               this.errorMSG = error.error;
             }
           )
-            
+         
           
         } 
 
@@ -148,22 +167,24 @@ export class PostComponent implements OnInit {
             const MessageId = id;
             const UserId = sessionStorage.getItem('userId')!;
             this.PostService.LikePost(id, MessageId, UserId )
-            .subscribe((data:any) => {
+             .subscribe((data:any) => {
              
-              if (data.like == 0 && MessageId == data.messageid) {
+              if (data.like == 1 && MessageId == data.messageid) {
                 this.messageId = MessageId;
-                this.likesBoolean = false;
-                
-              } else if (data.like == 1 && MessageId == data.messageid){
                 this.likesBoolean = true;
+                
+                  
+              } else if (data.like == 0 && MessageId == data.messageid){
+                this.likesBoolean = false;
                 this.messageId = MessageId;
+           
               }
               console.log(this.likesBoolean, this.messageId);
               }, (error) => {
                 console.log(error.error);
             });
-          }
-  
+         
+          }   
           
 };
 

@@ -67,8 +67,15 @@ export class AuthService {
   }
 
   //l'utilisateur modifie son post
-  updateUser(id: number, email:string, description: string, username:string, usersurname:string): Observable<User> {
-    return this.httpClient.put<User>('http://localhost:3000/api/users/profil/' + id, {email, description, username, usersurname})
+  updateUser(id: number, email:string, description: string, username:string, usersurname:string, photoURL:File): Observable<User> {
+    const formData = new FormData();
+    formData.append('email', (email));
+    formData.append('description', (description));
+    formData.append('photoURL', photoURL);
+    formData.append('username', username);
+    formData.append('usersurname', usersurname);
+
+    return this.httpClient.put<User>('http://localhost:3000/api/users/profil/' + id, formData)
     .pipe(
       catchError(this.errorHandler)
     )

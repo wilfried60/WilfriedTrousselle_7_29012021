@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Commentaire } from '../models/commentaire';
 import { Likes, LikesAll } from '../models/like';
@@ -17,15 +17,24 @@ export class PostService {
   constructor(
     private httpClient: HttpClient,
   ) { }
-
+  
+  postSubject = new Subject<any>();
+ 
+  
   ///////////////////////////////////////// partie post ////////////////////////////////////////
    
   //on récupère les posts
-  getPostAll(): Observable<Post> {
-    return this.httpClient.get<Post>('http://localhost:3000/api/users/message')
-    .pipe(
-      catchError(this.errorHandler)
-    )
+  getPostAll(){
+    this.httpClient.get('http://localhost:3000/api/users/message').subscribe(
+      (posts:any) => {
+        this.postSubject.next(posts);
+      },
+      (error) => {
+        this.postSubject.next([]);
+        console.error(error.error);
+       
+      }
+    );
   }
 
    //on récupère un post
@@ -37,11 +46,15 @@ export class PostService {
   }
   
   //on créer un post
-  createPost(title:string, contenu:string): Observable<Post> {
-    return this.httpClient.post<Post>('http://localhost:3000/api/users/message/', {title, contenu})
+  createPost(title:string, contenu:string, image:File): Observable<Post> {
+    const formData = new FormData();
+      formData.append('title', (title));
+      formData.append('contenu', (contenu));
+      formData.append('imageURL', image);
+    return this.httpClient.post<Post>('http://localhost:3000/api/users/message/', formData)
     .pipe(
       catchError(this.errorHandler)
-    )
+    ) 
   }  
   
   //l'utilisateur modifie son post

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PostService } from 'src/app/services/post.service';
 
@@ -12,38 +12,68 @@ import { PostService } from 'src/app/services/post.service';
   styleUrls: ['./create.component.scss']
 })
 export class CreateComponent implements OnInit {
-  
-  FormGroup!: FormGroup;
+  CreateForm!: FormGroup;
+  msgerror!: string;
+  msg!:string;
+  msgBoolean!:Boolean;
+  imageSrc!: string;
+  FormGroup = new FormGroup({
+    title: new FormControl (''),
+      contenu: new FormControl ('',[Validators.required]),
+        imageURL: new FormControl('')
+  });
 
   constructor(
     public formBuilder: FormBuilder,
     private router: Router,
     private postService: PostService
-    ) { 
-      this.FormGroup = this.formBuilder.group({
-  
-        title: [''],
-        contenu:['', [Validators.required]],
-       
-      
-      })
-    }
+    ) {  }
 
   ngOnInit(): void {
+  
+  }
+ 
+ 
+
+ 
+ 
+  onFileChange(event:any) {
+    const reader = new FileReader();
+    
+    if(event.target.files && event.target.files.length) {
+        const file = (event.target as HTMLInputElement).files[0];   
+      this.FormGroup.get('imageURL')?.setValue(file);
+      reader.readAsDataURL(file);
+    
+      reader.onload = () => {
+   
+        this.imageSrc = reader.result as string;
+     
+        this.FormGroup.patchValue({
+          imageUrl: reader.result
+        });
+      };
+   
+    }
   }
 
-  onSubmit() {
+  onSubmitCreateForm() {
     const title = this.FormGroup.get('title')?.value;
     const contenu = this.FormGroup.get('contenu')?.value;
-
-    this.postService.createPost(title, contenu)
+    const imageURL = this.FormGroup.get('imageURL')?.value;
+    this.postService.createPost(title, contenu, imageURL)
     .subscribe(() => {
-        console.log('le post est bien enregistré!'),
-        this.router.navigateByUrl('/post')
+        this.msg = 'le post est bien enregistré!';
+        this.msgBoolean = true;
       }, (error) => {
         console.log(error.error);
     });
   }
+  onPost() {
+    this.router.navigate(['/post']);
+  }
+  
 
+  
 
 }

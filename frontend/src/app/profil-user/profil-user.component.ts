@@ -16,6 +16,7 @@ export class ProfilUserComponent implements OnInit {
   FormGroup!: FormGroup;
   id:any = sessionStorage.getItem('userId');
   msg!: string;
+  photoSrc!: string;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -33,9 +34,12 @@ export class ProfilUserComponent implements OnInit {
          email: new FormControl (users.email), 
          username:  new FormControl (users.username),
          usersurname: new FormControl (users.usersurname),  
-         description: new FormControl (users.description),     
+         description: new FormControl (users.description),  
+         photoURL: new FormControl (users.photoURL),        
         })
     },
+
+
 
     
     (error) =>{
@@ -47,15 +51,32 @@ export class ProfilUserComponent implements OnInit {
 
   }
     
-
+  onFileChange(event:any) {
+    const reader = new FileReader();
+    if(event.target.files && event.target.files.length) {
+        const file = (event.target as HTMLInputElement).files[0];   
+      this.FormGroup.get('photoURL')?.setValue(file);
+      reader.readAsDataURL(file);
+    
+      reader.onload = () => {
+   
+        this.photoSrc = reader.result as string;
+     
+        this.FormGroup.patchValue({
+          imageUrl: reader.result
+        });
+      };
+   
+    }
+  }
 
   onSubmit() {
     const email = this.FormGroup.get('email')?.value;
     const username = this.FormGroup.get('username')?.value;
     const description = this.FormGroup.get('description')?.value;
     const usersurname = this.FormGroup.get('usersurname')?.value;
-
-    this.AuthService.updateUser(this.id, email, description, username, usersurname)
+    const photoURL = this.FormGroup.get('photoURL')?.value;
+    this.AuthService.updateUser(this.id, email, description, username, usersurname, photoURL)
     .subscribe(() => {
         console.log('le post est bien enregistré!'),
         this.router.navigateByUrl('/post')

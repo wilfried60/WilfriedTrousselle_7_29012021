@@ -4,17 +4,18 @@ module.exports = (sequelize, DataTypes) => {
     commentaire: DataTypes.TEXT,
     username: DataTypes.STRING,
     usersurname: DataTypes.STRING,
+    photoURL: DataTypes.STRING,
       MessageId: {
     type: DataTypes.INTEGER,
     references:{
-      model: 'Messages',
+      model: 'Message',
       key: 'id'
     }
   },
     UserId: {
     type:DataTypes.INTEGER,
     references:{
-      model: 'Users',
+      model: 'User',
       key: 'id'
     }
     }
@@ -24,7 +25,6 @@ module.exports = (sequelize, DataTypes) => {
     classMethods: {
       associate: function(models) {
         // associations can be defined here
-        
         models.Commentaire.belongsTo(models.User, 
           { foreignKey: {
             allowNull: false

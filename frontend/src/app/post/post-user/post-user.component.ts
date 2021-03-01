@@ -11,7 +11,7 @@ import { PostService } from 'src/app/services/post.service';
 export class PostUserComponent implements OnInit {
   
   errorMSG!: string;
-  posts!:any;
+  posts!:any[];
   FormGroup!: FormGroup;
   id:any = sessionStorage.getItem('idmessage');
 
@@ -49,8 +49,8 @@ export class PostUserComponent implements OnInit {
 
     this.PostService.updatePost(this.id, title, contenu)
     .subscribe(() => {
-        console.log('le post est bien enregistré!'),
-        this.router.navigateByUrl('/post')
+        console.log('le post est bien modifié!'),
+        this.router.navigate(['/post'])
       }, (error) => {
         console.log(error.error);
     });

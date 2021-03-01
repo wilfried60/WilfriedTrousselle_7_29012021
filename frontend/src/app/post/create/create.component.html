@@ -2,12 +2,20 @@
     <div class="cadre-auth">
         <h2>Créer un post</h2>
         <hr>
-        
-    <form [formGroup]="FormGroup" (ngSubmit)="onSubmit()">
+        <p class="text-danger"> {{ msgerror }}</p>
+    
+        <div *ngIf="!msgBoolean">
+    <form [formGroup]="FormGroup" enctype="multipart/form-data" (ngSubmit)="onSubmitCreateForm()"  >
         <div class="form-group">
           <label for="title" class="text-color" >Titre</label>
           <input type="text" class="form-control" id="title" formControlName="title" placeholder="Titre ( pas obligatoire!)" >
         </div>
+
+        <div class="form-group">
+          <label for="file" class="text-color">Ajoutez une image</label>
+          <input accept="image/*" id="imageURL" type="file"  class="form-control" (change)="onFileChange($event)">
+      </div>
+          <img [src]="imageSrc" *ngIf="imageSrc" style="width:300px">
       
         <div class="form-group">
           <div class="input-group-prepend">
@@ -16,8 +24,15 @@
           <textarea class="form-control" formControlName="contenu" required></textarea>
           </div>
            
-        <button class="btn btn-danger center-block" type="submit">créer mon post!</button>
+        <button class="btn btn-danger center-block" type="submit"  [disabled]="FormGroup.invalid ">créer mon post!</button>
       </form>
+    </div>
+    <div *ngIf="msgBoolean" class="msgCreate">
+      <p class="text-success">{{msg}}</p>
+     <button class="btn.btn-default" (click)="onPost()">Continuer</button> 
+
+       
+    </div>
     </div> 
     </main>
     
