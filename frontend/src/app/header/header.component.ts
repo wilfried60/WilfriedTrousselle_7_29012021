@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
@@ -14,7 +15,8 @@ export class HeaderComponent implements OnInit {
 
   constructor(
 
-    private auth: AuthService
+    private auth: AuthService,
+    private cookieService: CookieService
     
     ) 
     { }
@@ -23,7 +25,7 @@ export class HeaderComponent implements OnInit {
     this.auths = this.auth.authboolean.subscribe(
       (auth) => {
           this.isauth = auth;
-          if (sessionStorage.getItem("token")) {
+          if (this.cookieService.get('token')) {
             this.isauth = true;
           }
        

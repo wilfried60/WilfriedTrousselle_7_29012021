@@ -1,6 +1,6 @@
 const models = require('../models');
-const auth = require('../middleware/auth');
 const fs = require('fs');
+const auth = require('../middleware/auth');
 
 
 //création d'un commentaire
@@ -50,18 +50,16 @@ exports.createcommentaire= (req, res, next) => {
 
 // affichage des commentaire d'un message
 exports.getcommentaire= (req, res, next) => {
-    let headerAuth = req.headers['authorization']; 
+  let headerAuth = req.headers['authorization'];
     let userId = auth.userid(headerAuth);
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
-
-     
 
       models.Commentaire.findAll({
           attributes:['id', 'commentaire', 'username', 'usersurname', 'MessageId', 'UserId','createdAt'],
           include: [{
         model: models.User,
-        attributes: [ 'id', 'username', 'usersurname' ,'photoURL' ]
+        attributes: [ 'id', 'username', 'usersurname' ,'photoURL', 'isAdmin' ]
       }]
     })
 
@@ -79,11 +77,12 @@ exports.getcommentaire= (req, res, next) => {
 
     //supression du commentaire
     exports.deletecommentaire= (req, res, next) => {
+
         let headerAuth = req.headers['authorization'];
         let userId = auth.userid(headerAuth);
         if (!userId)
           return res.status(400).json({ 'error': 'mauvaise identification' });
-    
+       
           let commentaires = req.params.id;
          
          
@@ -95,7 +94,7 @@ exports.getcommentaire= (req, res, next) => {
            .then((commentaire) => {
             if (commentaire) {
                 models.Commentaire.destroy({
-                     where: { id: commentaires } 
+                     where: { id: commentaires, UserId:userId } 
                     })
                 return res.status(200).json({ message: "Votre commentaire est bien supprimé!"});
         

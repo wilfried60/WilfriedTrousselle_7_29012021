@@ -1,16 +1,17 @@
 import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { CookieService } from 'ngx-cookie-service';
+
 
 @Injectable()
 export class tokenInterceptor implements HttpInterceptor {
 
-  constructor() {
+  constructor(private cookieService: CookieService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     const newRequest = req.clone({
-      headers: req.headers.append('Authorization', 'Bearer ' + sessionStorage.getItem("token"))
+      headers: req.headers.append('Authorization', 'Bearer ' + this.cookieService.get('token'))
     });
     return next.handle(newRequest);
   }

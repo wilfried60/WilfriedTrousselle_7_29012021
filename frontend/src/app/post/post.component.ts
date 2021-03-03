@@ -3,6 +3,7 @@ import { PostService } from '../services/post.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 
 
@@ -16,7 +17,7 @@ export class PostComponent implements OnInit {
   subscription!: Subscription;
   errorMSG!:string;
   posts: any;
-  userid:any =sessionStorage.getItem('userId');
+  userid:any = this.cookieService.get('userId');
   msg!: string;
   FormGroup!: FormGroup;
   commentaires!: any;
@@ -29,7 +30,8 @@ export class PostComponent implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     public PostService: PostService,
-    private router : Router
+    private router : Router,
+    private cookieService: CookieService
    
      ) {
       this.FormGroup = this.formBuilder.group({
@@ -108,7 +110,7 @@ export class PostComponent implements OnInit {
         // modification du post
         PostUpdate(id:string) {
           this.router.navigate(['/post/post-user',id]);
-          sessionStorage.setItem('idmessage', id);
+          this.cookieService.set('idmessage', id, 1);
         }
       
 
@@ -133,9 +135,9 @@ export class PostComponent implements OnInit {
 
         onSubmitcomment(id: number ) {
           const commentaire = this.FormGroup.get('commentaire')?.value;
-          const username = sessionStorage.getItem('username')!;
-          const usersurname = sessionStorage.getItem('usersurname')!;
-          const UserId = sessionStorage.getItem('userId')!;
+          const username = this.cookieService.get('username');
+          const usersurname = this.cookieService.get('usersurname');
+          const UserId = this.cookieService.get('userId');
           this.PostService.createcomment(id, commentaire, username, usersurname, UserId)
           .subscribe(() => {
             window.location.reload();
@@ -165,7 +167,7 @@ export class PostComponent implements OnInit {
 
           LikePosts(id: number ) {
             const MessageId = id;
-            const UserId = sessionStorage.getItem('userId')!;
+            const UserId = this.cookieService.get('userId')!;
             this.PostService.LikePost(id, MessageId, UserId )
              .subscribe((data:any) => {
              

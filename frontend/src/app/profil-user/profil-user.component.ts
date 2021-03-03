@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from '../models/user';
 
@@ -14,34 +14,52 @@ export class ProfilUserComponent implements OnInit {
   errorMSG!: string;
   users:User[] = [];
   FormGroup!: FormGroup;
-  id:any = sessionStorage.getItem('userId');
+  id:any = this.cookieService.get('userId');
   msg!: string;
   photoSrc!: string;
+  isAdmintxt!: string;
+  username!: string;
+  usersurname!: string;
+  description!: string;
 
   constructor(
-    public formBuilder: FormBuilder,
+    public formBuilder: FormBuilder, 
     private router: Router,
-    private AuthService: AuthService
-    ) {   }
+    private AuthService: AuthService,
+    private cookieService: CookieService
+    ) { }
 
+   
     
   ngOnInit(): void {
    
      // on affiche le profil de l'utilisateur
      this.AuthService.getOnUser(this.id).subscribe(
       (users: User)=>{
+        if (users.description == 'null'){
+          this.description = 'Décrivez-vous!';
+        } else{
+          this.description = users.description;
+        }
         this.FormGroup = new FormGroup({
          email: new FormControl (users.email), 
          username:  new FormControl (users.username),
          usersurname: new FormControl (users.usersurname),  
-         description: new FormControl (users.description),  
+         description: new FormControl (this.description),  
          photoURL: new FormControl (users.photoURL),        
         })
+        this.photoSrc = users.photoURL;
+        this.username = users.username;
+        this.usersurname = users.usersurname;
+       
+        if (users.isAdmin == true){
+          this.isAdmintxt = 'Administrateur';
+        } else{
+          this.isAdmintxt = 'Membre';
+        }
+    
     },
 
-
-
-    
     (error) =>{
       this.errorMSG = error.error;
       console.log(this.users)
@@ -50,6 +68,8 @@ export class ProfilUserComponent implements OnInit {
     )  
 
   }
+
+  
     
   onFileChange(event:any) {
     const reader = new FileReader();
@@ -63,7 +83,7 @@ export class ProfilUserComponent implements OnInit {
         this.photoSrc = reader.result as string;
      
         this.FormGroup.patchValue({
-          imageUrl: reader.result
+          imageURL: reader.result
         });
       };
    
@@ -91,10 +111,11 @@ export class ProfilUserComponent implements OnInit {
       (data) => {
         console.log(data);
         this.msg = 'Compte supprimé';
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('userId');
-        sessionStorage.removeItem('username');
-        sessionStorage.removeItem('usersurname');
+        this.cookieService.delete('token'); 
+        this.cookieService.delete('userId'); 
+        this.cookieService.delete('username');
+        this.cookieService.delete('usersurname');
+        this.cookieService.delete('isAdmin'); 
         window.location.reload();
       },
       (error) => {

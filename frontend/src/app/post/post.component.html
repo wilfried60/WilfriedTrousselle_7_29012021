@@ -13,9 +13,12 @@
                    
                   
                     <div class="conteneur">
-                  <p class="user" *ngIf="post.contenu">
+                  <div class="user" *ngIf="post.contenu">
                   <img src="./assets/profile.png" *ngIf="!post.User.photoURL" alt="Photo de profil">
-                   <img [src]="post.User.photoURL"  *ngIf="post.User.photoURL" class="imagePost"> {{post.User.username}} {{post.User.usersurname}}<span class="heure">{{post.createdAt | date:'d MMM à h:mm a'}}</span></p>
+                   <img [src]="post.User.photoURL"  *ngIf="post.User.photoURL" class="imagePost" > {{post.User.username}} {{post.User.usersurname}}
+                   <p  class="heure">{{post.createdAt | date:'d MMM à h:mm a'}}</p>
+                   <p class="Admin" *ngIf='post.User.isAdmin'>Administrateur</p>
+                  </div>
                    
                  
                   
@@ -44,7 +47,7 @@
                         </button>
                       <p class="user-commentaire" ><img src="./assets/profile.png" *ngIf="!commentaire.User.photoURL" alt="Photo de profil">
                         <img [src]="commentaire.User.photoURL" class="photo-profil"  *ngIf="commentaire.User.photoURL"> {{commentaire.username}} {{commentaire.usersurname}} <span class="heure-commentaire"> {{commentaire.createdAt | date:'d MMM à h:mm a'}}</span></p>
-      
+                      <p class="Admin-commentaire" *ngIf='commentaire.User.isAdmin'>Admin</p>
                       <p class="comment" > {{commentaire.commentaire}} </p>
                     </div>
                   </div>

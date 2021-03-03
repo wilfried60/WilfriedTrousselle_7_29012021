@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { Post } from 'src/app/models/Post.model';
 import { PostService } from 'src/app/services/post.service';
 
 @Component({
@@ -9,53 +11,76 @@ import { PostService } from 'src/app/services/post.service';
   styleUrls: ['./post-user.component.scss']
 })
 export class PostUserComponent implements OnInit {
-  
   errorMSG!: string;
-  posts!:any[];
+  posts:Post[] = [];
   FormGroup!: FormGroup;
-  id:any = sessionStorage.getItem('idmessage');
+  id:any = this.cookieService.get('idmessage');
+  imageSRC!: string;
+  title!: string;
 
   constructor(
     public formBuilder: FormBuilder,
     private router: Router,
-    private PostService: PostService
+    private PostService: PostService,
+    private cookieService: CookieService
     ) {   }
 
     
-  ngOnInit(): void {
+  ngOnInit(): void { 
    
-     // on affiche tout les posts
-     this.PostService.getonPost(this.id).subscribe(
-      (posts)=>{
-        this.FormGroup = new FormGroup({
-         title: new FormControl (posts.message.title), 
-         contenu:  new FormControl (posts.message.contenu)       
-        })
-    },
-    (error) =>{
-      this.errorMSG = error.error;
-      console.log(this.posts)
-    }
-    
-    )  
+  // on affiche le profil de l'utilisateur
+  this.PostService.getonPost(this.id).subscribe(
+    (posts: Post)=>{
+      if (posts.message.title == 'null'){
+        this.title = 'Décrivez-vous!';
+      } else{
+        this.title = posts.message.title ;
+      }
+      this.FormGroup = new FormGroup({
+       title: new FormControl (posts.message.title), 
+       contenu:  new FormControl (posts.message.contenu),
+       imageURL: new FormControl (posts.message.imageURL),  
+      })
+      this.imageSRC = posts.message.imageURL;
+      
 
-  }
-    
-
-
-  onSubmit() {
-    const title = this.FormGroup.get('title')?.value;
-    const contenu = this.FormGroup.get('contenu')?.value;
-
-    this.PostService.updatePost(this.id, title, contenu)
-    .subscribe(() => {
-        console.log('le post est bien modifié!'),
-        this.router.navigate(['/post'])
-      }, (error) => {
-        console.log(error.error);
-    });
-  }
-
-
+  });
   
+}
+
+onFileChange(event:any) {
+  const reader = new FileReader();
+  if(event.target.files && event.target.files.length) {
+      const file = (event.target as HTMLInputElement).files[0];   
+    this.FormGroup.get('imageURL')?.setValue(file);
+    reader.readAsDataURL(file);
+  
+    reader.onload = () => {
+ 
+      this.imageSRC = reader.result as string;
+   
+      this.FormGroup.patchValue({
+        imageUrl: reader.result
+      });
+    };
+ 
+  }
+}
+
+
+
+onSubmit() {
+  const title = this.FormGroup.get('title')?.value;
+  const contenu = this.FormGroup.get('contenu')?.value;
+  const imageURL = this.FormGroup.get('imageURL')?.value;
+
+  this.PostService.updatePost(this.id, title, contenu, imageURL)
+  .subscribe(() => {
+      console.log('le post est bien modifié!'),
+      this.router.navigate(['/post'])
+    }, (error) => {
+      console.log(error.error);
+  });
+}
+
 }

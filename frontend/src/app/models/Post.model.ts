@@ -14,8 +14,7 @@ export interface Post{
             username: string;
             usersurname: string;
             photoURL: string;
-
-           
+            isAdmin:boolean;     
         }];
     };
     

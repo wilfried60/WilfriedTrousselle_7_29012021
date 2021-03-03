@@ -1,4 +1,3 @@
-
 var jwt = require('jsonwebtoken');
 const JWT = 'RANDOM_TOKEN_SECRET';
 

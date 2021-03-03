@@ -1,10 +1,18 @@
 <main>
    <div class="cadre-auth">
-       <h2>Créer un post</h2>
+       <h2>Modifier mon post</h2>
        <hr>
        <div *ngIf="FormGroup">
-   <form  [formGroup]="FormGroup" (ngSubmit)="onSubmit()">
-        
+   <form  [formGroup]="FormGroup" enctype="multipart/form-data"
+    (ngSubmit)="onSubmit()">
+     
+    <div class="form-group">
+      <label for="file" class="text-color">Ajoutez une image</label>
+      <input accept="image/*" id="imageURL" type="file"  class="form-control" (change)="onFileChange($event)">
+      <br>
+      <img [src]="imageSRC" class="img-profil-user" *ngIf="imageSRC"  alt="image du post!">
+  </div>
+
       <div>
        <div class="form-group" >
          <label for="title" class="text-color" >Titre</label>
@@ -12,7 +20,7 @@
       
        </div>
      
-       <div class="form-group">
+       <div class="form-group"> 
          <div class="input-group-prepend">
            <label for="contenu" class="text-color" >contenu</label>
          </div>

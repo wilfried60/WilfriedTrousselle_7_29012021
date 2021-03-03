@@ -5,6 +5,7 @@ export interface User{
         usersurname:string;
         photoURL:string;
         description: string;
+        isAdmin:boolean;
   
         
     

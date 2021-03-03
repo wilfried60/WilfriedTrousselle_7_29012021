@@ -70,9 +70,9 @@ exports.like= (req, res, next) => {
 exports.getlike= (req, res, next) => {
     let headerAuth = req.headers['authorization'];
     let userId = auth.userid(headerAuth);
-      if (!userId)
-        return res.status(400).json({ 'error': 'mauvaise identification' });
-  
+    if (!userId)
+      return res.status(400).json({ 'error': 'mauvaise identification' });
+
         models.Like.findAll({
             attributes:['id', 'MessageId', 'UserId'],
            

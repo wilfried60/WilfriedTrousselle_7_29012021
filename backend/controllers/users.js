@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const models = require('../models');
-const auth = require('../middleware/auth');
 const fs = require('fs');
+const auth = require('../middleware/auth');
 
  
 
@@ -19,7 +19,13 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
         let password = req.body.password;
         let photoURL = req.body.photoURL;
         let description = req.body.description;
-        let isAdmin = req.body.isAdmin;
+        let isAdmin;
+        if (email == 'admin@admin.admin'){
+             isAdmin = true;
+        } else {
+          isAdmin = false;
+        }
+        
 
         // on vérifie si les données existe
         if (email == null || username == null || usersurname == null || password == null) {
@@ -50,7 +56,7 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
                                 usersurname: usersurname,
                                 password: bcryptedPassword,
                                 description: description,
-                                isAdmin: false
+                                isAdmin: isAdmin
                             })
                                 .then((newUser) => res.status(201).json({
                                         'userId': newUser.id,
@@ -73,13 +79,20 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
         if (email == null ||  password == null) {
             return res.status(400).json({ 'error': 'Il manque un paramètre!' });
           }
+
+          if (email == 'admin@admin.admin'){
+            isAdmin = true;
+       } else {
+         isAdmin = false;
+       }
+
           models.User.findOne({
             where: { email: email }
           })
           .then(function(user){
               if (user){
                 bcrypt.compare(password, user.password, function(errBycrypt, resBycrypt){
-                    if(resBycrypt){
+                     if(resBycrypt){
                         return res.status(200).json({ 
                             'userId': user.id, 
                             'token': auth.USERtoken(user),
@@ -87,11 +100,10 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
                             'usersurname': user.usersurname,
                             'username': user.username,
                             
-                          });
-                            
+                          });  
                           
                 } else {
-                return res.status(403).json({ 'error': 'mot de passe invalide' });
+               return res.status(403).json({ 'error': 'mot de passe invalide' });
               }
           });
         } else {
@@ -114,9 +126,10 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
     let iduser = req.params.id;
     if (userId != iduser )
       return res.status(400).json({ 'error': 'mauvaise identification' });
+    
 
     models.User.findOne({
-      attributes: [ 'id', 'email', 'username', 'usersurname', 'description','photoURL' ],
+      attributes: [ 'id', 'email', 'username', 'usersurname', 'description','photoURL', 'isAdmin' ],
       where: { id: userId }
     }).then(function(user) {
       if (user) {
@@ -143,20 +156,34 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
       let description = req.body.description;
       let username = req.body.username;
       let usersurname = req.body.usersurname;
-      let photoURL =  `${req.protocol}://${req.get("host")}/images/${ req.file.filename}`;
       let email = req.body.email;
+      let photoURL = req.file;
 
     models.User.findOne({
       attributes: [ 'id', 'email', 'username', 'usersurname', 'description','photoURL' ],
       where: { id: userId }
     }).then(function(user) {
       if (user) {
+        if (photoURL) {
+          photoURL = `${req.protocol}://${req.get("host")}/images/${ req.file.filename}`;
+
+          if(user.photoURL){
+            const filename = user.photoURL.split('/images/')[1];
+             fs.unlink(`images/${filename}`,  (err) => {
+              if (err) console.log(err);
+              else {
+                console.log('fichier supprimé!');
+              }
+            });
+          }
+        };
+        
        user.update({
          email:(email ? email : user.email),
          username: (username ? username: user.username),
          usersurname: (usersurname ? usersurname: user.usersurname),
          description: (description ? description: user.description),
-         photoURL: (photoURL ? photoURL: ima)
+         photoURL: (photoURL ? photoURL: user.photoURL)
        })
         return  res.status(201).json(user);
 
@@ -168,7 +195,7 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
     });
     }
 
-     // suppression d'un profil
+      // suppression d'un profil
   exports.DeleteProfil= (req, res, next) => {
 
     let headerAuth  = req.headers['authorization'];
@@ -181,7 +208,7 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
       where: { id: userId }
     }).then((user) => {
       if (user.photoURL !== null) {
-        let filename = user.photo.split("/images")[1];
+        let filename = user.photoURL.split("/images")[1];
         fs.unlink(`images/${filename}`, () => {
           // s'il y a une photo de profile, on supprimme tout
           models.User.destroy({ where: { id: userId } });
@@ -197,7 +224,6 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
       res.status(500).json({ 'error': 'Impossible d\'accéder à l\'utilisateur' });
     });
   }
-
     // récupération de tout les profils
   exports.ALLProfil= (req, res, next) => {
 

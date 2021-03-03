@@ -25,6 +25,7 @@ body{
 main{
     margin: auto;
     width: 100%;
+    max-width: 1440px;
     min-height: 100vh;
 }
 
@@ -301,12 +302,12 @@ h1, h2{
   @media all and (min-width: 1240px) {
     .thumbs-gris, .thumbs-vert{
 
-        right: 100px;
+        right: 300px;
          
         }
 
         .nbLike{
-            right: 135px;
+            right: 335px;
         }
   }
 
@@ -318,10 +319,10 @@ h1, h2{
   }
 
   .heure{
-      display: block;
       color:rgb(90, 88, 88);
       margin-top:-20px;
-      margin-left: 60px;
+      margin-left: 70px;
+      padding-left: 20px;
       font-size: 0.8em;
 
   }
@@ -343,7 +344,7 @@ h1, h2{
 }
 .postimage img{
     
-    width: 100%;
+    width: 80%;
 }
 .user-commentaire{
     padding-top: 5px;
@@ -359,7 +360,23 @@ h1, h2{
     width: 100px;
     height: 50px;
 }
+.Admin{
+    color:green;
+    top: 15px;
+    margin-left: -58px;
+}
 
+.Admin-commentaire{
+    color:green;
+    margin-top: -11px;
+    float: left;
+    font-weight: 600;
+    margin-left: 22px;
+}
+
+form{
+    margin-top: 20px;
+}
 
 
 

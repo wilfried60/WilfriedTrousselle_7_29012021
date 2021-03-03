@@ -7,9 +7,9 @@ const fs = require('fs');
  exports.createMessage= (req, res, next) => {
   let headerAuth = req.headers['authorization'];
   let userId = auth.userid(headerAuth);
-    if (!userId)
-      return res.status(400).json({ 'error': 'mauvaise identification' });
-      
+  if (!userId)
+    return res.status(400).json({ 'error': 'mauvaise identification' });
+ 
       const title = req.body.title;
       const contenu = req.body.contenu;
       let image = req.file;
@@ -50,6 +50,7 @@ const fs = require('fs');
 
 //Récupération d'un message
 exports.oneMessage= (req, res, next) => {
+  
   let headerAuth = req.headers['authorization'];
   let userId = auth.userid(headerAuth);
     if (!userId)
@@ -86,10 +87,12 @@ exports.modifyMessage= (req, res, next) => {
 
       let title = req.body.title;
       let contenu = req.body.contenu;
-      let imageURL = req.body.imageURL;
+      let imageURL = req.file ;
 
       let messageID = req.params.id;
+    
 
+     
     models.Message.findOne({
         attributes: ['id', 'title', 'contenu', 'imageURL'],
           where: { id: messageID, userId:userId },
@@ -98,6 +101,19 @@ exports.modifyMessage= (req, res, next) => {
         .then(function(message) {
         
           if (message) {
+            if (imageURL) {
+              imageURL = `${req.protocol}://${req.get("host")}/images/${ req.file.filename}`;
+    
+              if(message.imageURL){
+                const filename = message.imageURL.split('/images/')[1];
+                 fs.unlink(`images/${filename}`,  (err) => {
+                  if (err) console.log(err);
+                  else {
+                    console.log('fichier supprimé!');
+                  }
+                });
+              }
+            };
            message.update({
             title:(title ? title : message.title),
             contenu: (contenu ? contenu: message.contenu),
@@ -151,15 +167,14 @@ exports.deleteMessage= (req, res, next) => {
 exports.allMessage= (req, res, next) => {
   let headerAuth = req.headers['authorization'];
   let userId = auth.userid(headerAuth);
-    if (!userId)
-      return res.status(400).json({ 'error': 'mauvaise identification' });
+  if (!userId)
+    return res.status(400).json({ 'error': 'mauvaise identification' });
     
-
 models.Message.findAll({
     attributes:['id', 'title', 'contenu', 'imageURL', 'likes','createdAt'],
     include: [{
         model: models.User,
-        attributes: [ 'id', 'username', 'usersurname' ,'photoURL' ]
+        attributes: [ 'id', 'username', 'usersurname' ,'photoURL', 'isAdmin' ]
       }]
 })
    .then((message) => {

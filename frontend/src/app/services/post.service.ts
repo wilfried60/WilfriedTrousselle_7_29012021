@@ -20,7 +20,7 @@ export class PostService {
   
   postSubject = new Subject<any>();
  
-  
+   
   ///////////////////////////////////////// partie post ////////////////////////////////////////
    
   //on récupère les posts
@@ -58,15 +58,19 @@ export class PostService {
   }  
   
   //l'utilisateur modifie son post
-  updatePost(id: number, title:string, contenu:string): Observable<Post> {
-    return this.httpClient.put<Post>('http://localhost:3000/api/users/message/' + id, {title, contenu})
+  updatePost(id: number, title:string, contenu:string, imageURL:File): Observable<Post> {
+    const formData = new FormData();
+      formData.append('title', (title));
+      formData.append('contenu', (contenu));
+      formData.append('imageURL', imageURL);
+    return this.httpClient.put<Post>('http://localhost:3000/api/users/message/' + id, formData)
     .pipe(
       catchError(this.errorHandler)
     )
   }
   
   // l'utilisateur supprime son post
-  deletePost(id: number){
+  deletePost(id: number, ){
     return this.httpClient.delete<Post>('http://localhost:3000/api/users/message/' + id)
     .pipe(    
       catchError(this.errorHandler)

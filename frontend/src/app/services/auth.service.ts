@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { User } from '../models/user';
 import { catchError } from 'rxjs/internal/operators/catchError';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class AuthService {
 
   constructor(
     private httpClient: HttpClient,
-    private router: Router, 
+    private cookieService: CookieService
   ) { }
   
   authboolean = new BehaviorSubject<boolean>(false);
@@ -42,10 +43,10 @@ export class AuthService {
     return new Promise<void>((resolve, reject) =>{
       this.httpClient.post('http://localhost:3000/api/users/login',  {email, password}).subscribe(
         (data:any) => {
-        sessionStorage.setItem('token', data.token);
-        sessionStorage.setItem('userId', data.userId);
-        sessionStorage.setItem('username', data.username);
-        sessionStorage.setItem('usersurname', data.usersurname);
+        this.cookieService.set('token', data.token, 1); 
+        this.cookieService.set('userId', data.userId, 1); 
+        this.cookieService.set('username', data.username, 1);
+        this.cookieService.set('usersurname', data.usersurname, 1);       
         this.userId =  data.userId;
         this.authboolean.next(true);
           resolve();
@@ -79,7 +80,7 @@ export class AuthService {
     .pipe(
       catchError(this.errorHandler)
     )
-  }
+  } 
 
    // Supression de l'utilisateur
    deleteProfil(id: number){
@@ -100,8 +101,11 @@ export class AuthService {
 
   signoutUser(){
     this.authboolean.next(false);
-    sessionStorage.removeItem( "token" ) ;
-    sessionStorage.removeItem( "userId" ) ;
+    this.cookieService.delete('token'); 
+    this.cookieService.delete('userId'); 
+    this.cookieService.delete('username');
+    this.cookieService.delete('usersurname');
+ 
   }
 
   
