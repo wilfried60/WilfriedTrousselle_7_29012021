@@ -170,7 +170,10 @@ exports.allMessage= (req, res, next) => {
   if (!userId)
     return res.status(400).json({ 'error': 'mauvaise identification' });
     
+    const order = req.query.order;
+
 models.Message.findAll({
+    order:[(order != null) ? order.split (':') : ['createdAt', 'DESC']],
     attributes:['id', 'title', 'contenu', 'imageURL', 'likes','createdAt'],
     include: [{
         model: models.User,

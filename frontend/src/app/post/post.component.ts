@@ -21,11 +21,23 @@ export class PostComponent implements OnInit {
   msg!: string;
   FormGroup!: FormGroup;
   commentaires!: any;
-  likesBoolean!: boolean;
   postBoolean!: boolean;
   messageId!:number;
   likes!:any;
   likesnumber!:number;
+  msgBoolean: boolean;
+  idmessage: number;
+  msgComment: string;
+  commentBoolean: boolean;
+  idCommentaire: number;
+  commentsBoolean: boolean;
+  msgComments: string;
+  idmessageLike: number;
+  msgBooleanLike: boolean;
+  msgLike: string;
+  placeholder: string;
+
+  
   
   constructor(
     public formBuilder: FormBuilder,
@@ -78,7 +90,6 @@ export class PostComponent implements OnInit {
       // on affiche tout les commentaires
       this.PostService.getCommentaireAll().subscribe(
         (commentaires)=>{
-        
         this.commentaires = commentaires.commentaire;
         
       },
@@ -87,7 +98,7 @@ export class PostComponent implements OnInit {
       }
       
       )  
-      this.PostService.getCommentaireAll();
+    
 
      
       
@@ -120,15 +131,15 @@ export class PostComponent implements OnInit {
           this.PostService.deletePost(id).subscribe(
             (data) => {
               console.log(data.message);
-              this.msg = 'votre post est bien supprimé';
-              window.location.reload();
+              this.msg = 'votre post est bien supprimé!';
+              this.msgBoolean = true;
+              this.idmessage = id;
             },
             (error) => {
               this.errorMSG = error.error;
             }
           )
-            
-          
+  
         } 
 
         // l'utilisateur envoie un commentaire au post
@@ -140,11 +151,14 @@ export class PostComponent implements OnInit {
           const UserId = this.cookieService.get('userId');
           this.PostService.createcomment(id, commentaire, username, usersurname, UserId)
           .subscribe(() => {
-            window.location.reload();
-           
+            this.msgComments = 'votre commentaire est bien ajouté!';
+              this.commentsBoolean = true;
+              this.idCommentaire = id;
+             
             }, (error) => {
               console.log(error.error);
           });
+        
         }
         
         // l'utilisateur supprime son commentaire
@@ -153,7 +167,10 @@ export class PostComponent implements OnInit {
           this.PostService.deleteComment(id).subscribe(
             () => {
               console.log('votre Commentaire est bien supprimé');
-              window.location.reload();
+              this.msgComment = 'votre commentaire est bien supprimé!';
+              this.commentBoolean = true;
+              this.idCommentaire = id;
+              
             },
             (error) => {
               this.errorMSG = error.error;
@@ -173,20 +190,63 @@ export class PostComponent implements OnInit {
              
               if (data.like == 1 && MessageId == data.messageid) {
                 this.messageId = MessageId;
-                this.likesBoolean = true;
-                
+                 this.msgLike = 'vous aimez cette publication!';
+                  this.msgBooleanLike = true;
+                   this.idmessageLike = id;
                   
               } else if (data.like == 0 && MessageId == data.messageid){
-                this.likesBoolean = false;
                 this.messageId = MessageId;
-           
+                this.msgLike = 'vous n\'aimez plus cette publication!';
+                this.msgBooleanLike = true;
+                 this.idmessageLike = id; 
+               
+              }else{
+                this.messageId = MessageId;
+                console.log('impossible de liker!');
               }
-              console.log(this.likesBoolean, this.messageId);
+              console.log(data.like, this.messageId);
               }, (error) => {
                 console.log(error.error);
             });
-         
           }   
+           
+          // on recupère les posts après suppression d'un post
+          onPost() {
+            this.PostService.getPostAll();
+          }
+          
+          // on recupère les posts et commentaires après suppression d'un commentaire
+          onComment() {
+            this.PostService.getCommentaireAll().subscribe(
+              (commentaires)=>{
+              this.commentaires = commentaires.commentaire;
+             
+            },
+            (error) =>{
+              this.errorMSG = error.error;
+            }
+            )  
+            this.PostService.getPostAll();
+            this.commentBoolean = false;
+            this.commentsBoolean = false;
+            this.FormGroup.reset();
+            
+           
+          }
+          
+           // on récupère tout les likes
+          onLike(){
+           
+            this.PostService.getLikePost().subscribe(
+              (likes)=>{
+                this.likes = likes.like; 
+             },
+                 (error) =>{
+                 this.errorMSG = error.error;
+             })  
+              this.PostService.getPostAll();
+              this.msgBooleanLike = false;
+          }
           
 };
 

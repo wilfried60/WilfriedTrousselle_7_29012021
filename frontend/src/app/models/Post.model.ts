@@ -1,5 +1,6 @@
 
 export interface Post{
+    map(arg0: (item: any) => any): any;
     message: {
         id: number;
         title: string;
@@ -9,13 +10,13 @@ export interface Post{
         createdAt: string;
         updatedAt: string;
 
-        User:[{
+        User:{
             id: number;
             username: string;
             usersurname: string;
             photoURL: string;
             isAdmin:boolean;     
-        }];
+        };
     };
     
 };

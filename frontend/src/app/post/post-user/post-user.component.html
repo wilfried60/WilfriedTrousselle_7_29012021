@@ -10,7 +10,7 @@
       <label for="file" class="text-color">Ajoutez une image</label>
       <input accept="image/*" id="imageURL" type="file"  class="form-control" (change)="onFileChange($event)">
       <br>
-      <img [src]="imageSRC" class="img-profil-user" *ngIf="imageSRC"  alt="image du post!">
+      <img [src]="imageSRC" class="img-profil-user" *ngIf="imageSRC"  alt="image du post!" style="width:300px">
   </div>
 
       <div>

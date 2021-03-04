@@ -15,58 +15,92 @@
                     <div class="conteneur">
                   <div class="user" *ngIf="post.contenu">
                   <img src="./assets/profile.png" *ngIf="!post.User.photoURL" alt="Photo de profil">
-                   <img [src]="post.User.photoURL"  *ngIf="post.User.photoURL" class="imagePost" > {{post.User.username}} {{post.User.usersurname}}
-                   <p  class="heure">{{post.createdAt | date:'d MMM à h:mm a'}}</p>
-                   <p class="Admin" *ngIf='post.User.isAdmin'>Administrateur</p>
+                   <img [src]="post.User.photoURL"  *ngIf="post.User.photoURL" class="imagePost" >
+                    {{post.User.username}} {{post.User.usersurname}}
+                   <p  class="heure">{{post.createdAt | date:'d MMM à h:mm a'}}
+                      <span class="Admin" *ngIf='post.User.isAdmin'>Admin</span>
+                    </p>
+                  
                   </div>
                    
                  
                   
                   <div class="like-post">
-                    
-                    <i class="fas fa-thumbs-up thumbs-gris"  aria-hidden="true"  title="Vous aimez" (click)="LikePosts(post.id)" ></i>
+                  
+                    <i class="fas fa-thumbs-up thumbs-gris"  aria-hidden="true"  title="Vous aimez" (click)="LikePosts(post.id)"></i>
                     <span class="nbLike">{{post.likes}}</span>
                     <div *ngFor="let like of likes;" >                  
                   <i *ngIf="like.UserId == userid && like.MessageId == post.id" class="fas fa-thumbs-up thumbs-vert" aria-hidden="true"  title="Vous aimez"  (click)="LikePosts(post.id)" ></i>  
                 </div>
-               
+                <div *ngIf="msgBooleanLike">
+                  <div  *ngIf="messageId == post.id" class="text-confirm-like">
+                    <p *ngIf="messageId == post.id" >{{msgLike}}</p>
+                   <button *ngIf="messageId == post.id" class="btn btn-secondary" (click)="onLike()">Ok</button> 
+                   </div>
+                  </div>
                 </div>
-                   
+               
                     </div>
+
+                    <div class="contenu-post">
+
+                      <div *ngIf="msgBoolean">
+                      <div  *ngIf="idmessage == post.id" class="text-confirm">
+                        <p *ngIf="idmessage == post.id" >{{msg}}</p>
+                       <button *ngIf="idmessage == post.id" class="btn btn-success" (click)="onPost()">Ok</button> 
+                       </div>
+                      </div>
+
                   <p class="title" *ngIf="post.title"> {{post.title}} </p>
                      <div class="postimage">
                      <p  *ngIf="post.imageURL"> <img [src]="post.imageURL" class="imagePost"> </p>
                     </div>
-                     <p  *ngIf="post.contenu"> {{post.contenu}}</p> 
-                      
-                     
+                     <p  *ngIf="post.contenu" > {{post.contenu}}</p> 
+                    </div>
+                       
                      <div  *ngFor="let commentaire of commentaires" >
                        <div class="commentaire" *ngIf="commentaire.MessageId == post.id">
                         <button type="button" class="button-trash_comment" *ngIf="userid == commentaire.UserId" (click)="deletecommentaire(commentaire.id)">
                           <i class="fas fa-trash" aria-hidden="true"></i>
                         </button>
+                        <div *ngIf="commentBoolean">
+                          <div  *ngIf="idCommentaire == commentaire.id" class="text-confirm">
+                            <p *ngIf="idCommentaire == commentaire.id" >{{msgComment}}</p>
+                           <button *ngIf="idCommentaire == commentaire.id" class="btn btn-success" (click)="onComment()">Ok</button> 
+                           </div>
+                          </div>
                       <p class="user-commentaire" ><img src="./assets/profile.png" *ngIf="!commentaire.User.photoURL" alt="Photo de profil">
-                        <img [src]="commentaire.User.photoURL" class="photo-profil"  *ngIf="commentaire.User.photoURL"> {{commentaire.username}} {{commentaire.usersurname}} <span class="heure-commentaire"> {{commentaire.createdAt | date:'d MMM à h:mm a'}}</span></p>
+                        <img [src]="commentaire.User.photoURL" class="photo-profil"  *ngIf="commentaire.User.photoURL"> {{commentaire.User.username}} {{commentaire.User.usersurname}} <span class="heure-commentaire"> {{commentaire.createdAt | date:'d MMM à h:mm a'}}</span></p>
                       <p class="Admin-commentaire" *ngIf='commentaire.User.isAdmin'>Admin</p>
                       <p class="comment" > {{commentaire.commentaire}} </p>
                     </div>
                   </div>
-              
+
+                 
+
                      <form [formGroup]="FormGroup" (ngSubmit)="onSubmitcomment(post.id)">
                       
                       <div class="form-group">
                         <div class="input-group-prepend">
                           <label for="commentaire" class="text-color" ></label>
                         </div>
-                        <textarea class="form-control" formControlName="commentaire" placeholder="Répondez quelque chose..."></textarea>
+                        <textarea class="form-control" formControlName="commentaire" placeholder="Répondez quelque chose...">
+                        </textarea>
                         </div>
+                        <div *ngIf="commentsBoolean">
+                          <div  *ngIf="idCommentaire == post.id" class="text-confirm">
+                            <p *ngIf="idCommentaire == post.id" >{{msgComments}}</p>
+                           <button *ngIf="idCommentaire == post.id" class="btn btn-success" (click)="onComment()">Ok</button> 
+                           </div>
+                          </div>
                       <button class="btn btn-danger center-block" type="submit">répondre!</button>
                     </form>
 
-                    <button type="button" class="button-trash" *ngIf="userid == post.User.id" (click)="deletePostU(post.id)">
+                    <button type="button" class="button-trash"  *ngIf="userid == post.User.id" (click)="deletePostU(post.id)">
                       <i class="fas fa-trash" aria-hidden="true"></i>
                     </button>
-                    <button type="button" class="button-trash-right" *ngIf="userid == post.User.id" (click)="PostUpdate(post.id)"> Modifier</button>
+                   
+                    <button type="button"  class="button-trash-right" *ngIf="userid == post.User.id" (click)="PostUpdate(post.id)"> Modifier</button>
                    </div> 
                      </div>
                        </main> 
