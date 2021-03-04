@@ -1,6 +1,6 @@
 
 export interface Post{
-    map(arg0: (item: any) => any): any;
+   
     message: {
         id: number;
         title: string;
