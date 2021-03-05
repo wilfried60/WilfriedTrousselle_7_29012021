@@ -98,7 +98,7 @@ export class AuthService {
     return throwError(errorMessage);
  }
 
-
+   // l'utilisateur se déconnecte, on supprime les données stockées
   signoutUser(){
     this.authboolean.next(false);
     this.cookieService.delete('token'); 

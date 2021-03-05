@@ -52,11 +52,46 @@ footer{
 
 }
 
-header{
-    margin-top: -10px;
+.header{
     width: 100%;
     background: #002e63;
-    min-height: 70px;
+    height: 120px;
+  }
+  .header li{
+    margin: auto;
+    margin-right:20px;
+    margin-top: 20px;
+    list-style:none;
+    color: white;
+}
+
+  .header img{
+   margin: auto;
+   text-align:center;
+   margin-top: 20px;
+   width: 200px;
+
+  }
+
+  .header nav ul{
+    margin-top: px;   
+  }
+
+  .header-desktop{
+   display: none;
+  }
+
+  @media all and (min-width: 490px) {
+      .header{
+        display: none;
+      }
+    .header-desktop{
+        display: block;
+        margin-top: -10px;
+        width: 100%;
+        background: #002e63;
+        min-height: 70px;
+      }
   }
   
   .logo-menu{
@@ -186,7 +221,7 @@ h1, h2{
 .post{
     padding: 10px;
     margin: auto;
-    width: 99%;
+    width: 100%;
     height: auto;
     background: rgba(255, 255, 255, 0.842);
     margin-top: 25px;
@@ -355,6 +390,11 @@ h1, h2{
     width: 100%;
     margin-left: 20px;
     color:rgb(59, 112, 172);
+}
+
+.comment{
+    margin-top: 27px;
+    padding: 3px;
 }
 
 .photo-profil{

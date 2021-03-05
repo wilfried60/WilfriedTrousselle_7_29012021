@@ -28,7 +28,7 @@ export class PostUserComponent implements OnInit {
     
   ngOnInit(): void { 
    
-  // on affiche le profil de l'utilisateur
+  // on affiche le post de l'utilisateur
   this.PostService.getonPost(this.id).subscribe(
     (posts: Post)=>{
       if (posts.message.title == 'null'){
@@ -48,6 +48,7 @@ export class PostUserComponent implements OnInit {
   
 }
 
+// on upload une image si celle-ci change
 onFileChange(event:any) {
   const reader = new FileReader();
   if(event.target.files && event.target.files.length) {
@@ -68,7 +69,7 @@ onFileChange(event:any) {
 }
 
 
-
+// on envoie les nouvelle données
 onSubmit() {
   const title = this.FormGroup.get('title')?.value;
   const contenu = this.FormGroup.get('contenu')?.value;

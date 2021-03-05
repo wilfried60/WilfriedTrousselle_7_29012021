@@ -33,10 +33,7 @@ export class CreateComponent implements OnInit {
   
   }
  
- 
-
- 
- 
+   // on upload et affiche l'image en preview
   onFileChange(event:any) {
     const reader = new FileReader();
     
@@ -57,6 +54,7 @@ export class CreateComponent implements OnInit {
     }
   }
 
+  // on envoie les données du formulaire
   onSubmitCreateForm() {
     const title = this.FormGroup.get('title')?.value;
     const contenu = this.FormGroup.get('contenu')?.value;
@@ -66,7 +64,7 @@ export class CreateComponent implements OnInit {
         this.msg = 'le post est bien enregistré!';
         this.msgBoolean = true;
       }, (error) => {
-        console.log(error.error);
+        this.msgerror = error.error;
     });
   }
   onPost() {

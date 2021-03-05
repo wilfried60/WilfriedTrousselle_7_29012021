@@ -1,9 +1,11 @@
 <main>
-    <div class="cadre-auth">
+    <section class="cadre-auth">
         <h2>Créer un post</h2>
         <hr>
+         <!--On affiche un message d'erreur -->
         <p class="text-danger"> {{ msgerror }}</p>
     
+         <!--On affiche le formulaire -->
         <div *ngIf="!msgBoolean">
     <form [formGroup]="FormGroup" enctype="multipart/form-data" (ngSubmit)="onSubmitCreateForm()"  >
         <div class="form-group">
@@ -33,6 +35,6 @@
 
        
     </div>
-    </div> 
+  </section> 
     </main>
     

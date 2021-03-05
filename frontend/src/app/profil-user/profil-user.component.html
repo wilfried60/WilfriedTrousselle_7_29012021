@@ -1,10 +1,10 @@
 <main>
-    <div class="cadre-auth">
+    <section class="cadre-auth">
         <h2>{{username}} {{usersurname}} ({{isAdmintxt}}) </h2>
         <hr>
-        <div *ngIf="FormGroup"> 
-        
 
+          <!--On affiche le formulaire de modification de profil -->
+        <div *ngIf="FormGroup"> 
     <button type="button" class="btn btn-danger" id="bouton" (click)="deleteProfils()">
       Supprimer mon compte
      </button>
@@ -45,7 +45,7 @@
       </form>
      </div>
      
-    </div> 
+    </section> 
     </main>
 
     

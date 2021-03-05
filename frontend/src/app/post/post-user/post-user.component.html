@@ -1,18 +1,18 @@
 <main>
-   <div class="cadre-auth">
+   <section class="cadre-auth">
        <h2>Modifier mon post</h2>
        <hr>
+        <!--On affiche le formulaire -->
        <div *ngIf="FormGroup">
-   <form  [formGroup]="FormGroup" enctype="multipart/form-data"
-    (ngSubmit)="onSubmit()">
-     
+   <form  [formGroup]="FormGroup" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
+
     <div class="form-group">
       <label for="file" class="text-color">Ajoutez une image</label>
       <input accept="image/*" id="imageURL" type="file"  class="form-control" (change)="onFileChange($event)">
       <br>
       <img [src]="imageSRC" class="img-profil-user" *ngIf="imageSRC"  alt="image du post!" style="width:300px">
   </div>
-
+ 
       <div>
        <div class="form-group" >
          <label for="title" class="text-color" >Titre</label>
@@ -30,5 +30,5 @@
        <button class="btn btn-danger center-block" type="submit">Modifier mon post!</button>
      </form>
     </div>
-   </div> 
+  </section> 
    </main>

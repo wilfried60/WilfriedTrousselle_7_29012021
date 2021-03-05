@@ -22,6 +22,8 @@ export class HeaderComponent implements OnInit {
     { }
 
   ngOnInit() {
+
+    // on vérifie si l'utilisateur est connecter afin de changer le menu
     this.auths = this.auth.authboolean.subscribe(
       (auth) => {
           this.isauth = auth;
@@ -32,12 +34,12 @@ export class HeaderComponent implements OnInit {
       }
     );
   }
-
+  
   signout() {
     this.auth.signoutUser();
     window.location.reload();
   }
-
+  
   ngOnDestroy() {
     this.auths.unsubscribe();
   }

@@ -70,7 +70,7 @@ export class ProfilUserComponent implements OnInit {
   }
 
   
-    
+    // on upload une nouvelle photo si celle-ci à changer
   onFileChange(event:any) {
     const reader = new FileReader();
     if(event.target.files && event.target.files.length) {
@@ -89,7 +89,7 @@ export class ProfilUserComponent implements OnInit {
    
     }
   }
-
+  // on envoie la modification du profil
   onSubmit() {
     const email = this.FormGroup.get('email')?.value;
     const username = this.FormGroup.get('username')?.value;
@@ -98,7 +98,7 @@ export class ProfilUserComponent implements OnInit {
     const photoURL = this.FormGroup.get('photoURL')?.value;
     this.AuthService.updateUser(this.id, email, description, username, usersurname, photoURL)
     .subscribe(() => {
-        console.log('le post est bien enregistré!'),
+        console.log('le profil est bien enregistré!'),
         this.router.navigateByUrl('/post')
       }, (error) => {
         console.log(error.error);
