@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from '../services/auth.service';
+import { User } from '../models/user';
 
 
 
@@ -17,6 +19,7 @@ export class PostComponent implements OnInit {
   subscription!: Subscription;
   errorMSG!:string;
   posts: any;
+  users:User[] = [];
   userid:any = this.cookieService.get('userId');
   msg!: string;
   FormGroup!: FormGroup;
@@ -36,6 +39,10 @@ export class PostComponent implements OnInit {
   msgBooleanLike: boolean;
   msgLike: string;
   placeholder: string;
+  isAdmin: boolean;
+  photoUrl: string;
+  username: string;
+  usersurname: string;
 
   
   
@@ -43,7 +50,8 @@ export class PostComponent implements OnInit {
     public formBuilder: FormBuilder,
     public PostService: PostService,
     private router : Router,
-    private cookieService: CookieService
+    private AuthService: AuthService,
+    private cookieService: CookieService,
    
      ) {
       this.FormGroup = this.formBuilder.group({
@@ -112,11 +120,32 @@ export class PostComponent implements OnInit {
       }
       
       )  
+
+
+      // on récupère les données d'admin de l'utilisateur
+     this.AuthService.getOnUser(this.userid).subscribe(
+      (users: User)=>{
+        this.isAdmin = users.isAdmin;
+        this.photoUrl = users.photoURL;
+        this.username = users.username;
+        this.usersurname = users.usersurname;
+        
+    },
+
+    (error) =>{
+      this.errorMSG = error.error;
+    }
+    
+    )  
+
+  }
+
+  
     
       
       
 
-        }
+        
 
         // modification du post
         PostUpdate(id:string) {

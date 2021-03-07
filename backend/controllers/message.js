@@ -141,10 +141,15 @@ exports.deleteMessage= (req, res, next) => {
       let messageID = req.params.id;
 
     models.Message.findOne({
-          where: { id: messageID, userId:userId },
+          where: { id: messageID },
         })
         
         .then((message) => {
+          models.User.findOne({
+            where: { id: userId }
+        })
+        .then((user)=>{
+        if(message.UserId == userId || user.isAdmin == true){
             if (message.imageURL !== null) {
               let filename = message.imageURL.split("/images")[1];
               fs.unlink(`images/${filename}`, () => {
@@ -156,8 +161,15 @@ exports.deleteMessage= (req, res, next) => {
               // si pas d'image, on supprime l'utilisateur
               models.Message.destroy({ where: { id: messageID } }); 
               res.status(200).json({ message: "message supprimé!" });
-            }
-          })
+            } 
+          } else {
+            return res.status(400).json({ 'error': 'Vous n\'avez pas les droits!' });
+          };
+        })
+        .catch(function(err) {
+          res.status(500).json({ 'error': 'Impossible de supprimer le message' });
+        });
+      })
           .catch(function(err) {
           res.status(500).json({ 'error': 'Impossible d\'accéder au message' });
         });

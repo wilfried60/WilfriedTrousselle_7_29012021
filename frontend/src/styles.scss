@@ -96,8 +96,11 @@ footer{
   
   .logo-menu{
     float: left;
-  
   }
+
+  .fa-user-times{
+    color: rgb(218, 100, 3);
+}
 
   .conteneur{
       height: 50px;
@@ -451,6 +454,20 @@ form{
     padding-top: 20px;
 }
 
+.image-connecter{
+    width: 60px;
+    height: 60px;
+    background-color: white;
+    border-radius: 50%;
+    margin-top: -22px;
+    margin-right: -15px;
+}
+.message-connexion{
+    float: right;
+}
+.name{
+    font-size: 1.1em;
+}
 
 
  

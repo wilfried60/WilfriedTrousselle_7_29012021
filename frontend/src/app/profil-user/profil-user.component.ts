@@ -115,7 +115,6 @@ export class ProfilUserComponent implements OnInit {
         this.cookieService.delete('userId'); 
         this.cookieService.delete('username');
         this.cookieService.delete('usersurname');
-        this.cookieService.delete('isAdmin'); 
         window.location.reload();
       },
       (error) => {

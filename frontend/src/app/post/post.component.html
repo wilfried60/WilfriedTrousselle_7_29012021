@@ -9,6 +9,13 @@
               <button class="btn btn-primary" type="submit">
                    <a routerLink="../post/create">Créer un post</a>
                 </button>
+               
+                <div class="message-connexion">
+                  <span class="name">  {{usersurname}} {{username}} </span>
+                <img src="./assets/profile.png" *ngIf="!photoUrl" class="image-connecter" alt="Photo de profil">
+                   <img [src]="photoUrl"  *ngIf="photoUrl" class="image-connecter" alt="Photo de profil" > 
+                  
+                  </div>
 
                  <!--On affiche les données d'utilisateur et la date de création des posts -->
                   <div class="post" *ngFor="let post of posts">
@@ -39,15 +46,8 @@
                 </div>
                </div>
                      
-                  <!--On affiche la confirmation du post supprimé-->
+                 
                     <div class="contenu-post">
-                      <div *ngIf="msgBoolean">
-                      <div  *ngIf="idmessage == post.id" class="text-confirm">
-                        <p *ngIf="idmessage == post.id" >{{msg}}</p>
-                       <button *ngIf="idmessage == post.id" class="btn btn-success" (click)="onPost()" aria-label="Fermer cette fenêtre">Ok</button> 
-                       </div>
-                      </div>
-                  
                    <!--On affiche les posts -->
                   <p class="title" *ngIf="post.title"> {{post.title}} </p>
                      <div class="postimage">
@@ -60,7 +60,7 @@
                      <!--On affiche l'icone de suppression d'un commentaire et son texte de confirmation  -->
                      <div  *ngFor="let commentaire of commentaires" >
                        <div class="commentaire" *ngIf="commentaire.MessageId == post.id">
-                        <button type="button" class="button-trash_comment" *ngIf="userid == commentaire.UserId" (click)="deletecommentaire(commentaire.id)" aria-label="Supprimer ce commentaire">
+                        <button type="button" class="button-trash_comment" *ngIf="userid == commentaire.UserId || isAdmin" (click)="deletecommentaire(commentaire.id)" aria-label="Supprimer ce commentaire">
                           <i class="fas fa-trash" aria-hidden="true"></i>
                         </button>
                         <div *ngIf="commentBoolean">
@@ -70,6 +70,8 @@
                            </div>
                           </div>
 
+                      
+
                            <!--On affiche les commentaires-->
                       <p class="user-commentaire" ><img src="./assets/profile.png" *ngIf="!commentaire.User.photoURL" alt="Photo de profil">
                         <img [src]="commentaire.User.photoURL" class="photo-profil"  *ngIf="commentaire.User.photoURL"> {{commentaire.User.username}} {{commentaire.User.usersurname}} <span class="heure-commentaire"> {{commentaire.createdAt | date:'d MMM à h:mm a'}}</span></p>
@@ -78,7 +80,15 @@
                     </div>
                   </div>
 
-                 
+                     
+                    <!--On affiche la confirmation du post supprimé-->
+                    <div *ngIf="msgBoolean">
+                      <div  *ngIf="idmessage == post.id" class="text-confirm">
+                        <p *ngIf="idmessage == post.id" >{{msg}}</p>
+                       <button *ngIf="idmessage == post.id" class="btn btn-success" (click)="onPost()" aria-label="Fermer cette fenêtre">Ok</button> 
+                       </div>
+                      </div>
+                      
                       <!--On créer un commentaire -->
                      <form [formGroup]="FormGroup" (ngSubmit)="onSubmitcomment(post.id)">
                       <div class="form-group">
@@ -94,8 +104,10 @@
                       <button class="btn btn-danger center-block" type="submit">répondre!</button>
                     </form>
                      
+                   
+
                      <!--On affiche le bouton de suppression d'un post -->
-                    <button type="button" class="button-trash"  *ngIf="userid == post.User.id" (click)="deletePostU(post.id)" aria-label="Supprimer ce post">
+                    <button type="button" class="button-trash"  *ngIf="userid == post.User.id || isAdmin" (click)="deletePostU(post.id)" aria-label="Supprimer ce post">
                       <i class="fas fa-trash" aria-hidden="true"></i>
                     </button>
                    

@@ -84,8 +84,8 @@ exports.getcommentaire= (req, res, next) => {
           return res.status(400).json({ 'error': 'mauvaise identification' });
        
           let commentaires = req.params.id;
-         
-         
+        
+          
     
           models.Commentaire.findOne({
             where: {id: commentaires},  
@@ -93,11 +93,20 @@ exports.getcommentaire= (req, res, next) => {
     
            .then((commentaire) => {
             if (commentaire) {
+               models.User.findOne({
+                    where: { id: userId }
+                })
+                .then((user)=>{
+                if(commentaire.UserId == userId || user.isAdmin == true){
                 models.Commentaire.destroy({
-                     where: { id: commentaires, UserId:userId } 
+                     where: { id: commentaires } 
                     })
                 return res.status(200).json({ message: "Votre commentaire est bien supprimé!"});
-        
+            }else{
+                return res.status(400).json({ 'error': 'Vous n\'avez pas les droits!' });
+            }})
+            .catch((err) => res.status(500).json({ 'error': 'Une erreur est survenue!' })); 
+
             } else {
                 return res.status(400).json({ 'error': 'Aucun Commentaire à supprimer!' });
             }
