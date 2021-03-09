@@ -1,28 +1,17 @@
 'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  const Like = sequelize.define('Like', {
-    MessageId: {
-    type: DataTypes.INTEGER,
-    references:{
-      model: 'Messages',
-      key: 'id'
-    }
-  },
-    UserId: {
-    type:DataTypes.INTEGER,
-    references:{
-      model: 'Users',
-      key: 'id'
-    }
-    }
-  }, 
-  
-  {
-    classMethods: {
-      associate: function(models) {
-        // associations can be defined here
-        
-        models.Like.belongsTo(models.User, 
+  class Like extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      models.Like.belongsTo(models.User, 
         { foreignKey: {
           allowNull: false
          
@@ -36,8 +25,27 @@ module.exports = (sequelize, DataTypes) => {
           }, 
           onDelete:'CASCADE',
         })
-      }
     }
+  };
+  Like.init({
+    MessageId: {
+      type: DataTypes.INTEGER,
+      references:{
+        model: 'Messages',
+        key: 'id'
+      }
+    },
+      UserId: {
+      type:DataTypes.INTEGER,
+      references:{
+        model: 'Users',
+        key: 'id'
+      }
+      }
+  }, {
+    sequelize,
+
+    modelName: 'Like',
   });
   return Like;
 };
