@@ -2,7 +2,8 @@ __Groupomania__
 
 - Framework Angular
 - NodeJs & express & sequelize & Mysql
-- Instructions:
+
+__--Instructions--__
 
 __Ouvrez le dossier frontend et procédez comme ceci:__
 
