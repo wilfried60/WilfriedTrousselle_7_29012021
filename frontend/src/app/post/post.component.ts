@@ -263,7 +263,7 @@ export class PostComponent implements OnInit {
            
           }
           
-           // on récupère tout les likes
+           // on récupère tout les likes aprés un clic
           onLike(){
            
             this.PostService.getLikePost().subscribe(

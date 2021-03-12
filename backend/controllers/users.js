@@ -3,6 +3,7 @@ const models = require('../models');
 const fs = require('fs');
 const auth = require('../middleware/auth');
 
+
  
 
 //regex
@@ -85,7 +86,7 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
        } else {
          isAdmin = false;
        }
-
+      
           models.User.findOne({
             where: { email: email }
           })
@@ -93,19 +94,21 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
               if (user){
                 bcrypt.compare(password, user.password, function(errBycrypt, resBycrypt){
                      if(resBycrypt){
-                        return res.status(200).json({ 
+                   res.cookie('Token',auth.USERtoken(user),{maxAge:84000,httpOnly:true});          
+                     res.status(200).json({  
+                            'cookie': req.cookie.Token,
                             'userId': user.id, 
                             'token': auth.USERtoken(user),
                             'message': `Hello ${user.username}!`,
                             'usersurname': user.usersurname,
                             'username': user.username,
-                            
-                          });  
-                          
+                          }); 
+                                              
                 } else {
                return res.status(403).json({ 'error': 'mot de passe invalide' });
               }
           });
+         
         } else {
             return res.status(404).json({'error':'l\'utilisateur n\'existe pas!'})
         }
@@ -113,7 +116,8 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
           .catch(function(err){
             return res.status(500).json({ 'error': 'Une erreur est survenue!' });
           });
-
+            
+        
         }
       
       
