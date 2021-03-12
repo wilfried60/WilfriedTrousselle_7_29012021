@@ -96,7 +96,6 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
                      if(resBycrypt){
                    res.cookie('Token',auth.USERtoken(user),{maxAge:84000,httpOnly:true});          
                      res.status(200).json({  
-                            'cookie': req.cookie.Token,
                             'userId': user.id, 
                             'token': auth.USERtoken(user),
                             'message': `Hello ${user.username}!`,
