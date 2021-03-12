@@ -11,8 +11,8 @@ export class tokenInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     const newRequest = req.clone({
-      /*  withCredentials: true */
-      headers: req.headers.append('Authorization', 'Bearer ' + this.cookieService.get('token'))
+     withCredentials: true 
+    /*  headers: req.headers.append('Authorization', 'Bearer ' + this.cookieService.get('token'))*/
     });
     return next.handle(newRequest);
   }

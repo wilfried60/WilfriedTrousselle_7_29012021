@@ -111,7 +111,7 @@ export class ProfilUserComponent implements OnInit {
       (data) => {
         console.log(data);
         this.msg = 'Compte supprimé';
-        this.cookieService.delete('token'); 
+        this.cookieService.delete('userBoolean'); 
         this.cookieService.delete('userId'); 
         this.cookieService.delete('username');
         this.cookieService.delete('usersurname');

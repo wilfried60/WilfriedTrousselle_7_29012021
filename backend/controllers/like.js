@@ -1,11 +1,21 @@
 const models = require('../models');
-const auth = require('../middleware/auth');
+const JWT = 'RANDOM_TOKEN_SECRET';
+const jwt = require('jsonwebtoken');
 
 
 // mise en place d'un like
 exports.like= (req, res, next) => {
-    let headerAuth = req.headers['authorization'];
-    let userId = auth.userid(headerAuth);
+    let usersId = "";
+    let token = req.cookies.Token;
+    if(token != null) {
+      try {
+        let tokenVerif = jwt.verify(token, JWT);
+        if(tokenVerif != null)
+          usersId = tokenVerif.userId;
+      } catch(err) { }
+    }
+    const userId = usersId;
+
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
@@ -68,8 +78,17 @@ exports.like= (req, res, next) => {
 
 //Récupération des likes
 exports.getlike= (req, res, next) => {
-    let headerAuth = req.headers['authorization'];
-    let userId = auth.userid(headerAuth);
+    let usersId = "";
+    let token = req.cookies.Token;
+    if(token != null) {
+      try {
+        let tokenVerif = jwt.verify(token, JWT);
+        if(tokenVerif != null)
+          usersId = tokenVerif.userId;
+      } catch(err) { }
+    }
+    const userId = usersId;
+    
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 

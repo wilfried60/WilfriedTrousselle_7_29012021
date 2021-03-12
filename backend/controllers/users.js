@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const models = require('../models');
 const fs = require('fs');
 const auth = require('../middleware/auth');
+const JWT = 'RANDOM_TOKEN_SECRET';
+const jwt = require('jsonwebtoken');
 
 
  
@@ -94,8 +96,9 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
               if (user){
                 bcrypt.compare(password, user.password, function(errBycrypt, resBycrypt){
                      if(resBycrypt){
-                   res.cookie('Token',auth.USERtoken(user),{maxAge:84000,httpOnly:true});          
+                   res.cookie('Token',auth.USERtoken(user),{maxAge:24 * 60 * 60 * 1000,httpOnly:true}); //cookies 24h         
                      res.status(200).json({  
+                            'userBoolean': true, 
                             'userId': user.id, 
                             'token': auth.USERtoken(user),
                             'message': `Hello ${user.username}!`,
@@ -124,8 +127,17 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
        // connexion au profil de l'utilisateur
       exports.profil= (req, res, next) => {
 
-    let headerAuth = req.headers['authorization'];
-    let userId = auth.userid(headerAuth);
+        let usersId = "";
+        let token = req.cookies.Token;
+        if(token != null) {
+          try {
+            let tokenVerif = jwt.verify(token, JWT);
+            if(tokenVerif != null)
+              usersId = tokenVerif.userId;
+          } catch(err) { }
+        }
+        const userId = usersId;
+
     let iduser = req.params.id;
     if (userId != iduser )
       return res.status(400).json({ 'error': 'mauvaise identification' });
@@ -149,8 +161,17 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
   // modification du profil de l'utilisateur
   exports.modifyProfil= (req, res, next) => {
 
-    let headerAuth = req.headers['authorization'];
-    let userId = auth.userid(headerAuth);
+    let usersId = "";
+let token = req.cookies.Token;
+if(token != null) {
+  try {
+    let tokenVerif = jwt.verify(token, JWT);
+    if(tokenVerif != null)
+      usersId = tokenVerif.userId;
+  } catch(err) { }
+}
+const userId = usersId;
+
     let iduser = req.params.id;
     if (userId != iduser )
       return res.status(400).json({ 'error': 'mauvaise identification' });
@@ -201,8 +222,17 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
       // suppression d'un profil
   exports.DeleteProfil= (req, res, next) => {
 
-    let headerAuth  = req.headers['authorization'];
-    let userId      = auth.userid(headerAuth);
+    let usersId = "";
+    let token = req.cookies.Token;
+    if(token != null) {
+      try {
+        let tokenVerif = jwt.verify(token, JWT);
+        if(tokenVerif != null)
+          usersId = tokenVerif.userId;
+      } catch(err) { }
+    }
+    const userId = usersId;
+
     let iduser = req.params.id;
     if (userId != iduser )
       return res.status(400).json({ 'error': 'mauvaise identification' });
@@ -215,11 +245,13 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
         fs.unlink(`images/${filename}`, () => {
           // s'il y a une photo de profile, on supprimme tout
           models.User.destroy({ where: { id: userId } });
+          res.clearCookie('Token');
           res.status(200).json({ message: "utilisateur supprimé!" });
         });
       } else {
         // si pas de photo de profil, on supprime l'utilisateur
         models.User.destroy({ where: { id: userId } }); 
+        res.clearCookie('Token');
         res.status(200).json({ message: "utilisateur supprimé!" });
       }
     })
@@ -230,8 +262,17 @@ const regex_email =/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/;
     // récupération de tout les profils
   exports.ALLProfil= (req, res, next) => {
 
-    let headerAuth  = req.headers['authorization'];
-    let userId      = auth.userid(headerAuth);
+    let usersId = "";
+let token = req.cookies.Token;
+if(token != null) {
+  try {
+    let tokenVerif = jwt.verify(token, JWT);
+    if(tokenVerif != null)
+      usersId = tokenVerif.userId;
+  } catch(err) { }
+}
+const userId = usersId;
+
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 

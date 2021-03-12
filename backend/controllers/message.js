@@ -1,12 +1,22 @@
 
 const models = require('../models');
-const auth = require('../middleware/auth');
 const fs = require('fs');
+const JWT = 'RANDOM_TOKEN_SECRET';
+const jwt = require('jsonwebtoken');
 
  // création du message
  exports.createMessage= (req, res, next) => {
-  let headerAuth = req.headers['authorization'];
-  let userId = auth.userid(headerAuth);
+  let usersId = "";
+  let token = req.cookies.Token;
+  if(token != null) {
+    try {
+      let tokenVerif = jwt.verify(token, JWT);
+      if(tokenVerif != null)
+        usersId = tokenVerif.userId;
+    } catch(err) { }
+  }
+  const userId = usersId;
+
   if (!userId)
     return res.status(400).json({ 'error': 'mauvaise identification' });
  
@@ -51,8 +61,17 @@ const fs = require('fs');
 //Récupération d'un message
 exports.oneMessage= (req, res, next) => {
   
-  let headerAuth = req.headers['authorization'];
-  let userId = auth.userid(headerAuth);
+ let usersId = "";
+let token = req.cookies.Token;
+if(token != null) {
+  try {
+    let tokenVerif = jwt.verify(token, JWT);
+    if(tokenVerif != null)
+      usersId = tokenVerif.userId;
+  } catch(err) { }
+}
+const userId = usersId;
+
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
@@ -80,8 +99,17 @@ models.Message.findOne({
 
 //Modification d'un message
 exports.modifyMessage= (req, res, next) => {
-  let headerAuth = req.headers['authorization'];
-  let userId = auth.userid(headerAuth);
+  let usersId = "";
+  let token = req.cookies.Token;
+  if(token != null) {
+    try {
+      let tokenVerif = jwt.verify(token, JWT);
+      if(tokenVerif != null)
+        usersId = tokenVerif.userId;
+    } catch(err) { }
+  }
+  const userId = usersId;
+
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
@@ -133,8 +161,17 @@ exports.modifyMessage= (req, res, next) => {
 
 //Suppression d'un message
 exports.deleteMessage= (req, res, next) => {
-  let headerAuth = req.headers['authorization'];
-  let userId = auth.userid(headerAuth);
+  let usersId = "";
+let token = req.cookies.Token;
+if(token != null) {
+  try {
+    let tokenVerif = jwt.verify(token, JWT);
+    if(tokenVerif != null)
+      usersId = tokenVerif.userId;
+  } catch(err) { }
+}
+const userId = usersId;
+
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
@@ -177,8 +214,16 @@ exports.deleteMessage= (req, res, next) => {
 
 //Récupération de tout les messages
 exports.allMessage= (req, res, next) => {
-  let headerAuth = req.headers['authorization'];
-  let userId = auth.userid(headerAuth);
+  let usersId = "";
+let token = req.cookies.Token;
+if(token != null) {
+  try {
+    let tokenVerif = jwt.verify(token, JWT);
+    if(tokenVerif != null)
+      usersId = tokenVerif.userId;
+  } catch(err) { }
+}
+const userId = usersId;
   if (!userId)
     return res.status(400).json({ 'error': 'mauvaise identification' });
     

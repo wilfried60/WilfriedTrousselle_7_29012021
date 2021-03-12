@@ -1,12 +1,22 @@
 const models = require('../models');
 const fs = require('fs');
-const auth = require('../middleware/auth');
+const JWT = 'RANDOM_TOKEN_SECRET';
+const jwt = require('jsonwebtoken');
 
 
 //création d'un commentaire
 exports.createcommentaire= (req, res, next) => {
-    let headerAuth = req.headers['authorization'];
-    let userId = auth.userid(headerAuth);
+    let usersId = "";
+    let token = req.cookies.Token;
+    if(token != null) {
+      try {
+        let tokenVerif = jwt.verify(token, JWT);
+        if(tokenVerif != null)
+          usersId = tokenVerif.userId;
+      } catch(err) { }
+    }
+    const userId = usersId;
+    
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
@@ -50,8 +60,17 @@ exports.createcommentaire= (req, res, next) => {
 
 // affichage des commentaire d'un message
 exports.getcommentaire= (req, res, next) => {
-  let headerAuth = req.headers['authorization'];
-    let userId = auth.userid(headerAuth);
+    let usersId = "";
+    let token = req.cookies.Token;
+    if(token != null) {
+      try {
+        let tokenVerif = jwt.verify(token, JWT);
+        if(tokenVerif != null)
+          usersId = tokenVerif.userId;
+      } catch(err) { }
+    }
+    const userId = usersId;
+
     if (!userId)
       return res.status(400).json({ 'error': 'mauvaise identification' });
 
@@ -78,8 +97,17 @@ exports.getcommentaire= (req, res, next) => {
     //supression du commentaire
     exports.deletecommentaire= (req, res, next) => {
 
-        let headerAuth = req.headers['authorization'];
-        let userId = auth.userid(headerAuth);
+        let usersId = "";
+    let token = req.cookies.Token;
+    if(token != null) {
+      try {
+        let tokenVerif = jwt.verify(token, JWT);
+        if(tokenVerif != null)
+          usersId = tokenVerif.userId;
+      } catch(err) { }
+    }
+    const userId = usersId;
+
         if (!userId)
           return res.status(400).json({ 'error': 'mauvaise identification' });
        

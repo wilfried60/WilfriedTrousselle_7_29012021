@@ -27,13 +27,15 @@ export class HeaderComponent implements OnInit {
     this.auths = this.auth.authboolean.subscribe(
       (auth) => {
           this.isauth = auth;
-          if (this.cookieService.get('token')) {
+          if (this.cookieService.get('userBoolean')) {
             this.isauth = true;
           }
        
       }
     );
   }
+
+  
   
   signout() {
     this.auth.signoutUser();

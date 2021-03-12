@@ -43,7 +43,7 @@ export class AuthService {
     return new Promise<void>((resolve, reject) =>{
       this.httpClient.post('http://localhost:3000/api/users/login',  {email, password}).subscribe(
         (data:any) => {
-        this.cookieService.set('token', data.token, 1); 
+        this.cookieService.set('userBoolean', data.userBoolean, 1); 
         this.cookieService.set('userId', data.userId, 1); 
         this.cookieService.set('username', data.username, 1);
         this.cookieService.set('usersurname', data.usersurname, 1);       
@@ -89,6 +89,7 @@ export class AuthService {
       catchError(this.errorHandler)
     )
   }
+  
 
    // on renvoie l'erreur du serveur
    errorHandler(error:any) {
@@ -101,7 +102,7 @@ export class AuthService {
    // l'utilisateur se déconnecte, on supprime les données stockées
   signoutUser(){
     this.authboolean.next(false);
-    this.cookieService.delete('token'); 
+    this.cookieService.delete('userBoolean'); 
     this.cookieService.delete('userId'); 
     this.cookieService.delete('username');
     this.cookieService.delete('usersurname');

@@ -19,7 +19,7 @@ export class AuthGuardService implements CanActivate{
       (resolve, reject) => {
         this.auth.authboolean.subscribe(
           (auth) => {
-            if (auth || this.cookieService.get('token')) {
+            if (auth || this.cookieService.get('userBoolean')) {
               resolve(true);
             } else {
               this.router.navigate(['/login']);
