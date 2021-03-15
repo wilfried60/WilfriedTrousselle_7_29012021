@@ -1,41 +1,4 @@
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const Message = sequelize.define('Message', {
-    title: {
-       type: DataTypes.STRING, 
-       allowNull: true },
-    contenu:  {
-      type: DataTypes.TEXT, 
-      allowNull: false },
-    imageURL:  {
-      type: DataTypes.STRING, 
-      allowNull: true },
-    likes:  {
-      type: DataTypes.INTEGER, 
-      allowNull: false },
-    dislikes:  {
-      type: DataTypes.INTEGER, 
-      allowNull: false },
-  
-  }, {
-    classMethods: {
-      associate: function(models) {
-        // associations can be defined here
-        
-        models.Message.belongsTo(models.User, {
-          foreignKey: {
-            allowNull: false
-          },
-          onDelete:'CASCADE',
-        })
-       
-      }
-    }
-  });
-  return Message;
-};
-
-'use strict';
 const {
   Model
 } = require('sequelize');
