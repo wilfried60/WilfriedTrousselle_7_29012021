@@ -17,6 +17,8 @@ export class PostUserComponent implements OnInit {
   id:any = this.cookieService.get('idmessage');
   imageSRC!: string;
   title!: string;
+  msg!:string;
+  msgBoolean!:Boolean;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -77,11 +79,14 @@ onSubmit() {
 
   this.PostService.updatePost(this.id, title, contenu, imageURL)
   .subscribe(() => {
-      console.log('le post est bien modifié!'),
-      this.router.navigate(['/post'])
+    this.msg = 'le post est bien modifié!';
+    this.msgBoolean = true;
     }, (error) => {
       console.log(error.error);
   });
+}
+onPost() {
+  this.router.navigate(['/post']);
 }
 
 }

@@ -4,6 +4,7 @@
         <hr>
 
           <!--On affiche le formulaire de modification de profil -->
+          <div *ngIf="!msgBoolean">
         <div *ngIf="FormGroup"> 
     <button type="button" class="btn btn-danger" id="bouton" (click)="deleteProfils()">
       Supprimer mon compte
@@ -44,6 +45,12 @@
         <button class="btn btn-primary" type="submit" >Je Valide mes changements!</button>
       </form>
      </div>
+    </div>
+
+     <div *ngIf="msgBoolean" class="msgCreate">
+      <p class="text-success">{{msg}}</p>
+     <button class="btn.btn-default" (click)="onPost()">Continuer</button> 
+    </div>
      
     </section> 
     </main>

@@ -3,6 +3,7 @@
        <h2>Modifier mon post</h2>
        <hr>
         <!--On affiche le formulaire -->
+        <div *ngIf="!msgBoolean">
        <div *ngIf="FormGroup">
    <form  [formGroup]="FormGroup" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
 
@@ -29,6 +30,11 @@
       </div>
        <button class="btn btn-danger center-block" type="submit">Modifier mon post!</button>
      </form>
+    </div>
+  </div>
+    <div *ngIf="msgBoolean" class="msgCreate">
+      <p class="text-success">{{msg}}</p>
+     <button class="btn.btn-default" (click)="onPost()">Continuer</button> 
     </div>
   </section> 
    </main>

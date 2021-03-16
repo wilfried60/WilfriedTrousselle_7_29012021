@@ -21,6 +21,7 @@ export class ProfilUserComponent implements OnInit {
   username!: string;
   usersurname!: string;
   description!: string;
+  msgBoolean!:Boolean;
 
   constructor(
     public formBuilder: FormBuilder, 
@@ -98,8 +99,8 @@ export class ProfilUserComponent implements OnInit {
     const photoURL = this.FormGroup.get('photoURL')?.value;
     this.AuthService.updateUser(this.id, email, description, username, usersurname, photoURL)
     .subscribe(() => {
-        console.log('le profil est bien enregistré!'),
-        this.router.navigateByUrl('/post')
+      this.msg = 'Votre profil est bien modifié!';
+      this.msgBoolean = true;
       }, (error) => {
         console.log(error.error);
     });
@@ -125,5 +126,8 @@ export class ProfilUserComponent implements OnInit {
     
   } 
 
+  onPost() {
+    this.router.navigate(['/post']);
+  }
   
 }

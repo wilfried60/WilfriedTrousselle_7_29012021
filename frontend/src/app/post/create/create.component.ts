@@ -63,7 +63,7 @@ export class CreateComponent implements OnInit {
     .subscribe(() => {
         this.msg = 'le post est bien enregistré!';
         this.msgBoolean = true;
-      }, (error) => {
+      }, (error) => { 
         this.msgerror = error.error;
     });
   }
