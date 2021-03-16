@@ -20,10 +20,9 @@ export class AuthGuardService implements CanActivate{
         this.auth.authboolean.subscribe(
           (auth) => {
             if (auth) {
-              this.cookieService.set('userBoolean', 'true', 1); 
               resolve(true);
 
-            }else if(this.cookieService.get('userBoolean')){
+            }else if(this.cookieService.get('userBoolean') == 'true'){
               resolve(true);
               
             }else{

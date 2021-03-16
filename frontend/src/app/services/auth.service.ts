@@ -43,6 +43,7 @@ export class AuthService {
     return new Promise<void>((resolve, reject) =>{
       this.httpClient.post('http://localhost:3000/api/users/login',  {email, password}).subscribe(
         (data:any) => {
+        this.cookieService.set('userBoolean', 'true', 1); 
         this.cookieService.set('userId', data.userId, 1); 
         this.cookieService.set('username', data.username, 1);
         this.cookieService.set('usersurname', data.usersurname, 1);       

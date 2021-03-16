@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
     this.auths = this.auth.authboolean.subscribe(
       (auth) => {
           this.isauth = auth;
-          if (this.cookieService.get('userBoolean')) {
+          if (this.cookieService.get('userBoolean') == 'true') {
             this.isauth = true;
           }
        
